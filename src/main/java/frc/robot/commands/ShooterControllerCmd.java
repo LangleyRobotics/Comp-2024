@@ -14,15 +14,12 @@ public class ShooterControllerCmd extends Command {
   private final ShooterSubsystem shooterSubsystem;
   private final Supplier<Boolean> shooterPositiveDirFunction;
   private final Supplier<Boolean> shooterNegativeDirFunction;
-  private final Supplier<Boolean> shooterHalfPositiveDirFunction;
-  private final Supplier<Boolean> shooterHalfNegativeDirFunction;
+
   
-  public ShooterControllerCmd(ShooterSubsystem shooterSubsystem, Supplier<Boolean> shooterNegativeDirFunction, Supplier<Boolean> shooterPositiveDirFunction,Supplier<Boolean> shooterHalfNegativeDirFunction,Supplier<Boolean> shooterHalfPositiveDirFunction) {
+  public ShooterControllerCmd(ShooterSubsystem shooterSubsystem, Supplier<Boolean> shooterPositiveDirFunction, Supplier<Boolean> shooterNegativeDirFunction) {
     this.shooterSubsystem = shooterSubsystem;
-    this.shooterNegativeDirFunction = shooterNegativeDirFunction;
     this.shooterPositiveDirFunction = shooterPositiveDirFunction;
-    this.shooterHalfNegativeDirFunction = shooterHalfNegativeDirFunction;
-    this.shooterHalfPositiveDirFunction = shooterHalfPositiveDirFunction;
+    this.shooterNegativeDirFunction = shooterNegativeDirFunction;
 
     addRequirements(shooterSubsystem);
   }
@@ -38,8 +35,6 @@ public class ShooterControllerCmd extends Command {
     //are the buttons pressed
     boolean positiveDir = shooterPositiveDirFunction.get();
     boolean negativeDir = shooterNegativeDirFunction.get();
-    boolean halfNegativeDir = shooterHalfNegativeDirFunction.get();
-    boolean halfPositiveDir = shooterHalfPositiveDirFunction.get();
 
     double velocity = 0;
 
@@ -47,10 +42,6 @@ public class ShooterControllerCmd extends Command {
       velocity = ShooterConstants.kShooterMotorSpeed;
     } else if(negativeDir) {
       velocity = -1 * ShooterConstants.kShooterMotorSpeed;
-    } else if(halfNegativeDir) {
-      velocity = ShooterConstants.kShooterMotorSpeed/1.25;
-    } else if(halfPositiveDir) {
-      velocity = -1 * ShooterConstants.kShooterMotorSpeed/1.25;
     }
 
     shooterSubsystem.setShooterMotor(velocity);

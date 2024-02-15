@@ -26,9 +26,12 @@ public class PivotSubsystem extends SubsystemBase {
     private final PIDController pivotPIDController = new PIDController(PivotConstants.kP_Pivot, PivotConstants.kI_Pivot, PivotConstants.kD_Pivot);
 
     double absEncoderRaw = 0;
+    
 
-
-    public PivotSubsystem() {}
+    public PivotSubsystem() {
+        // Configures the encoder to return a distance of 4 for every rotation
+        pivotAbsEncoder.setDistancePerRotation(5.0);
+    }
 
 
     @Override
@@ -36,6 +39,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     }
 
+    //Manually controlling angle of pivot (operator controller during teleop)
     public void setPivotMotor(double velocity){
 
         try {
@@ -65,22 +69,30 @@ public class PivotSubsystem extends SubsystemBase {
 
     //returns the value of the pivot encoder (position of the arm angle)
     public double getPivotAbsEncoder() {
-        pivotAbsEncoder.setPositionOffset(0);
-        absEncoderRaw = pivotAbsEncoder.getAbsolutePosition() + PivotConstants.kPivottOffset;
-        if (absEncoderRaw < PivotConstants.kPivotEncoderBreakpoint) {
-            return (absEncoderRaw + 1);
-        } else {
-            return absEncoderRaw;
+        pivotAbsEncoder.setDistancePerRotation(0.3);
+        pivotAbsEncoder.setPositionOffset(0.3);
+        return -3000*pivotAbsEncoder.getDistance();
+    }
+
+    //TEST Simple go to setpoint
+    public void goToSetpoint(double setpoint) {
+        double curAngle = getPivotAbsEncoder();
+        while(curAngle < setpoint - PivotConstants.deadbandAngle) {
+            pivotMotorRight.set(PivotConstants.tinyPivotSpeed);
+            pivotMotorLeft.set(-PivotConstants.tinyPivotSpeed);
         }
     }
 
-    //Feedforward and PID controller for pivot
-    //
-    // public void pivotWithFeedforwardPID(double desPosition, double desVelocity, double desAccel) {
-    //     pivotMotorRight.setVoltage(pivotFeedForward.calculate(desPosition, desVelocity, desAccel)
-    //         + pivotPIDController.calculate(pivotAbsEncoder.getRate(), leftVelocitySetpoint));
-    //     rightMotor.setVoltage(feedForward.calculate(rightVelocitySetpoint)
-    //         + rightPID.calculate(rightEncoder.getRate(), rightVelocitySetpoint));
-    //   }
+    //TEST Feedforward and PID controller for pivot
+    public void pivotWithFeedforwardPID(double desPosition, double desVelocity, double desAccel) {
+        pivotMotorRight.setVoltage(pivotFeedForward.calculate(desPosition, desVelocity, desAccel)
+            + pivotPIDController.calculate(getPivotAbsEncoder(), desPosition));
+        pivotMotorLeft.setVoltage(pivotFeedForward.calculate(desPosition, desVelocity)
+            + pivotPIDController.calculate(getPivotAbsEncoder(), desPosition));
+
+
+        // rightMotor.setVoltage(feedForward.calculate(rightVelocitySetpoint)
+        //     + rightPID.calculate(rightEncoder.getRate(), rightVelocitySetpoint));
+      }
 
 }

@@ -31,40 +31,38 @@ public class PivotControllerCmd extends Command{
     addRequirements(pivotSubsystem);
   }
 
-  // public PivotControllerCmd(PivotSubsystem pivotSubsystem, CameraSubsystem cameraSubsystem) {
-  //   this.pivotSubsystem = pivotSubsystem;
-  //   this.cameraSubsystem = cameraSubsystem;
-  //   this.pivotPositiveDirFunction = () -> (MathMethods.speedMax(
-  //     PivotConstants.kAprilCamSpeedFactor*Math.sin(Math.toRadians(cameraSubsystem.getPitch())),
-  //     PivotConstants.kAprilCamMaxSpeedMetersPerSecond,
-  //     PivotConstants.kAprilCamDeadbandDegrees,
-  //     PivotConstants.kAprilCamMinSpeed, 
-  //     () -> cameraSubsystem.getPitch()));
+  public PivotControllerCmd(PivotSubsystem pivotSubsystem, CameraSubsystem cameraSubsystem) {
+    this.pivotSubsystem = pivotSubsystem;
+    this.cameraSubsystem = cameraSubsystem;
+    this.pivotPositiveDirFunction = () -> 0.0;
+    this.pivotNegativeDirFunction = () -> 0.0;
 
-  //   this.pivotNegativeDirFunction = () -> (MathMethods.speedMax(
-  //     PivotConstants.kAprilCamSpeedFactor*Math.sin(Math.toRadians(cameraSubsystem.getPitch())),
-  //     PivotConstants.kAprilCamMaxSpeedMetersPerSecond,
-  //     PivotConstants.kAprilCamDeadbandDegrees,
-  //     PivotConstants.kAprilCamMinSpeed, 
-  //     () -> cameraSubsystem.getPitch()));;
-
-  //   addRequirements(pivotSubsystem, cameraSubsystem);
-  // }
+    addRequirements(pivotSubsystem, cameraSubsystem);
+  }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
 
   @Override
   public void execute() {
-    
-    //is the button pressed
-    double positiveSpeed = pivotPositiveDirFunction.get();
-    double negativeSpeed = pivotNegativeDirFunction.get();
 
-    double velocity = positiveSpeed - negativeSpeed;
+    //If setting pivot to a setpoint
+    if(cameraSubsystem != null) {
+      pivotSubsystem.goToSetpoint(MathMethods.calculateSetpoint(cameraSubsystem));
+      //pivotSubsystem.pivotWithFeedforwardPID(double desPosition, double desVelocity, double desAccel);
+    } else {
+      
+      //Establish button inputs
+      double positiveSpeed = pivotPositiveDirFunction.get();
+      double negativeSpeed = pivotNegativeDirFunction.get();
 
-    pivotSubsystem.setPivotMotor(velocity);
+      double velocity = positiveSpeed - negativeSpeed;
+
+      pivotSubsystem.setPivotMotor(velocity);
+    }
   }
 
 

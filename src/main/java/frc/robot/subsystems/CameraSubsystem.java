@@ -61,13 +61,19 @@ public class CameraSubsystem extends SubsystemBase{
         }
 
     }
+
+    public PhotonPipelineResult getResult() {
+        return camera.getLatestResult();
+    }
     
     public boolean hasTargets(PhotonPipelineResult result) {
         // Check if the latest result has any targets.
         return result.hasTargets();
     }
 
-    public double getDistanceToAprilTag(PhotonPipelineResult result) {
+    //Returns the distance from camera to april tag in meters
+    public double getDistanceToAprilTag() {
+        PhotonPipelineResult result = getResult();
         if (result.hasTargets()) {
             // First calculate range
             double range =

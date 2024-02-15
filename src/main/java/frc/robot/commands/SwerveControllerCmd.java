@@ -9,7 +9,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.CameraSubsystem;
 
 import frc.robot.Constants;
 import frc.robot.MathMethods;
@@ -17,7 +16,6 @@ import frc.robot.MathMethods;
 public class SwerveControllerCmd extends Command {
 
     private final DriveSubsystem swerveSubsystem;
-    private final CameraSubsystem cameraSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> fieldOrientedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -27,7 +25,6 @@ public class SwerveControllerCmd extends Command {
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> finishedCondition) {
         this.swerveSubsystem = swerveSubsystem;
-        this.cameraSubsystem = null;
         this.finishedCondition = finishedCondition;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
@@ -38,27 +35,7 @@ public class SwerveControllerCmd extends Command {
         this.turningLimiter = new SlewRateLimiter(Constants.kMaxAngularAccelerationRadiansPerSecondSquared);
         addRequirements(swerveSubsystem);
     }
-
-    public SwerveControllerCmd(DriveSubsystem swerveSubsystem, CameraSubsystem cameraSubsystem) {
-        this.swerveSubsystem = swerveSubsystem;
-        this.cameraSubsystem = cameraSubsystem;
-        this.xSpdFunction = () -> (MathMethods.speedMax(AutoConstants.kAprilDriveSpeedFactor*Math.sin(Math.toRadians(cameraSubsystem.getPitch())),
-            AutoConstants.kAprilDriveMaxSpeedMetersPerSecond, AutoConstants.kAprilDriveDeadbandDegrees, AutoConstants.kAprilDriveMinSpeed, () -> cameraSubsystem.getPitch()));
-        
-        this.ySpdFunction = () -> (-MathMethods.speedMax(AutoConstants.kAprilDriveSpeedFactor*Math.sin(Math.toRadians(cameraSubsystem.getYaw())), 
-            AutoConstants.kAprilDriveMaxSpeedMetersPerSecond, AutoConstants.kAprilDriveDeadbandDegrees, AutoConstants.kAprilDriveMinSpeed, () -> cameraSubsystem.getYaw()));
-            
-        this.turningSpdFunction = () -> (0.0);
-        this.fieldOrientedFunction = () -> false;
-        
-        this.xLimiter = new SlewRateLimiter(Constants.kMaxAccelerationMetersPerSecondSquared);
-        this.yLimiter = new SlewRateLimiter(Constants.kMaxAccelerationMetersPerSecondSquared);
-        this.turningLimiter = new SlewRateLimiter(Constants.kMaxAngularAccelerationRadiansPerSecondSquared);
-
-        this.finishedCondition  = () -> false;
-
-        addRequirements(swerveSubsystem, cameraSubsystem);
-    }
+    
 
     @Override
     public void initialize() {

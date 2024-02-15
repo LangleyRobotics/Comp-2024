@@ -29,6 +29,7 @@ import frc.robot.Constants.AutoConstants;
 import com.pathplanner.lib.path.PathPlannerPath;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.Buttons;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.AllForNaught;
@@ -37,12 +38,14 @@ import frc.robot.commands.AllForNaught;
 //Command Imports
 import frc.robot.commands.DriveToPointCmd;
 import frc.robot.commands.RumbleCmd;
+import frc.robot.commands.ShootDuringAutoCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.OTFTrajectoryFactory;
 import frc.robot.commands.SwerveControllerCmd;
 import frc.robot.commands.ShooterControllerCmd;
 import frc.robot.commands.PivotControllerCmd;
 import frc.robot.commands.ClimbControllerCmd;
+import frc.robot.commands.SetPivotCmd;
 
 //Subsystem Imports
 import frc.robot.subsystems.DriveSubsystem;
@@ -53,7 +56,7 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 
 //Auto Commands
-import frc.robot.commands.AutoShootCmd;
+import frc.robot.commands.ShootDuringAutoCmd;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -99,7 +102,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    
+    //Auto align the wheels before matches
+    robotDrive.initModulesReset(false);
   
     // Configure default commands
 
@@ -117,9 +121,7 @@ public class RobotContainer {
       new ShooterControllerCmd(
         shooterSubsystem,
         () -> operatorController.getRightBumper(),
-        () -> operatorController.getLeftBumper(),
-        () -> operatorController.getAButton(),
-        () -> operatorController.getYButton()));
+        () -> operatorController.getLeftBumper()));
 
     intakeSubsystem.setDefaultCommand(
       new IntakeCmd(
@@ -144,30 +146,35 @@ public class RobotContainer {
 
 
 
-
     // Register Named Commands
     //I think named commands = commands other than driving around that still need to be executed in auto
-    NamedCommands.registerCommand("Auto Shoot", new AutoShootCmd());
-    
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    autoChooser.addOption("Straight Auto", new PathPlannerAuto("Straight Auto"));
-    autoChooser.addOption("ShootAndStraight Auto", new PathPlannerAuto("ShootAndStraight Auto"));
+    SequentialCommandGroup pivotToIntake = new SequentialCommandGroup(
+      new SetPivotCmd(pivotSubsystem, 0), 
+      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1));
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+      SequentialCommandGroup pivotToShootUpClose = new SequentialCommandGroup(
+      new SetPivotCmd(pivotSubsystem, 1), 
+      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1));
 
-    //**Load in paths from Trajectories as drive commands using the AutoCommandFactory**
+    NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
+    NamedCommands.registerCommand("Pivot To Shoot Up Close", pivotToShootUpClose);
+    NamedCommands.registerCommand("Shoot", new ShootDuringAutoCmd(shooterSubsystem));
 
-
-   
-    
-
-    //BACKUP AUTO
-    SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
 
 
     // Configure the button bindings
     configureButtonBindings();
+
+    Command goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
+
+    
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser.addOption("Go Straight", goStraight);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    //**Load in paths from Trajectories as drive commands using the AutoCommandFactory**
 
   }
 
@@ -178,22 +185,38 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    // SmartDashboard.putData("Straight Auto", new PathPlannerAuto("Straight Auto"));
+    // SmartDashboard.putData("ShootAndStraight Auto", new PathPlannerAuto("ShootAndStraight Auto"));
+    //SmartDashboard.putData("Example Auto", new PathPlannerAuto("Example Auto"));
+
+
+
+
     
-    //Intake ball
+    //Intake ring
     new JoystickButton(operatorController, Buttons.X).whileTrue(new IntakeCmd(intakeSubsystem, 
       () -> IntakeConstants.kIntakeMotorSpeed, 1));
 
-    //Outake ball
+    //Outake ring
     new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
       () -> IntakeConstants.kIntakeMotorSpeed, -1));
 
+    //Shoot out ring
+    new JoystickButton(operatorController, Buttons.Y).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
+      () -> true, () -> false));
+
+    //Shoot in ring
+    new JoystickButton(operatorController, Buttons.A).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
+      () -> false, () -> true));
+
 
   
-    //Slow intake
-    new POVButton(operatorController, Buttons.RIGHT_ARR).whileTrue(new IntakeCmd(intakeSubsystem, () -> (0.25), -1));
+    // //Slow intake
+    // new POVButton(operatorController, Buttons.RIGHT_ARR).whileTrue(new IntakeCmd(intakeSubsystem, () -> (0.25), -1));
 
-    //Slow outake
-    new POVButton(operatorController, Buttons.LEFT_ARR).whileTrue(new IntakeCmd(intakeSubsystem, () -> (0.25), 1));
+    // //Slow outake
+    // new POVButton(operatorController, Buttons.LEFT_ARR).whileTrue(new IntakeCmd(intakeSubsystem, () -> (0.25), 1));
 
     //Climb expand
     new POVButton(driverController, Buttons.UP_ARR).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, () -> false));
@@ -209,9 +232,7 @@ public class RobotContainer {
       new ShooterControllerCmd(
         shooterSubsystem,
         () -> false,
-        () -> true,
-        () -> false,
-        () -> false)));
+        () -> true)));
 
     //Outake and outshoot
     new JoystickButton(operatorController, Buttons.Menu).whileTrue(new ParallelCommandGroup(
@@ -219,8 +240,6 @@ public class RobotContainer {
       new ShooterControllerCmd(
         shooterSubsystem,
         () -> true,
-        () -> false,
-        () -> false,
         () -> false)));
 
 
@@ -237,10 +256,10 @@ public class RobotContainer {
     new JoystickButton(driverController, Buttons.X).toggleOnTrue(new AllForNaught(robotDrive));
 
     //Slow drive with d-pad
-    // new POVButton(driverController, Buttons.DOWN_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> -DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> 0.0, () -> true,  () -> false));
-    // new POVButton(driverController, Buttons.UP_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> 0.0, () -> true,  () -> false));
-    // new POVButton(driverController, Buttons.RIGHT_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> 0.0, () -> -DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> true,  () -> false));
-    // new POVButton(driverController, Buttons.LEFT_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> 0.0, () -> DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> true,  () -> false));
+    new POVButton(driverController, Buttons.DOWN_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> -DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> 0.0, () -> true,  () -> false));
+    new POVButton(driverController, Buttons.UP_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> 0.0, () -> true,  () -> false));
+    new POVButton(driverController, Buttons.RIGHT_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> 0.0, () -> -DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> true,  () -> false));
+    new POVButton(driverController, Buttons.LEFT_ARR).whileTrue(new SwerveControllerCmd(robotDrive, () -> 0.0, () -> DriveConstants.kSlowDriveCoefficient, () -> 0.0, () -> true,  () -> false));
 
 
 
@@ -267,12 +286,9 @@ public class RobotContainer {
 
   }
 
-
-
-
-
-
-
+  public void stopInitModuleReset() {
+    robotDrive.initModulesReset(true);
+  }
 
 
   /**
