@@ -114,11 +114,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    
     new Thread( () -> {
       try {
         new WaitCommand(1.0);
-        zeroHeading();
+        zeroHeading(); //Didn't work??
+        //initModulesReset(getGyroConnected());
         //m_gyro.setAngleAdjustment(180);
       } catch (Exception e) {
       }
@@ -220,7 +220,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d() {
-      return m_gyro.getRotation2d();
+    // Rotation2d temp=new Rotation2d(m_gyro.getRotation2d().getDegrees()+48.5);
+    //   return temp;
+    return m_gyro.getRotation2d();
   }
 
   public double getRoll() {
@@ -422,9 +424,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   //TEST Realign wheels at the start of each match
-  public void initModulesReset(boolean stop) {
-    //double frontRightInitAngle = frontRight.getAbsoluteEncoderRad();
-    if(!stop) {
+  public void initModulesReset(boolean go) {
+    if(go) {
+      double frontRightInitAngle = frontRight.getAbsoluteEncoderRad();
       SwerveModuleState frontRightDesAngle = new SwerveModuleState(0.001, new Rotation2d(DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad));
       frontRight.setDesiredState(frontRightDesAngle);
 

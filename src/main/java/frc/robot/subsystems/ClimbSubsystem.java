@@ -19,8 +19,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void setClimbMotor(double velocity){
         climbMotorRight.set(velocity);
-        //motors are facing opposite directions
-        climbMotorLeft.set(-velocity);
+        climbMotorLeft.set(velocity);
     }
 
     public void stopClimbMotor(){

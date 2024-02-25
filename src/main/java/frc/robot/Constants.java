@@ -49,17 +49,15 @@ public final class Constants {
 
 
     //Before = all true
-    public static final boolean kFrontRightTurningMotorReversed = false;
-    public static final boolean kRearRightTurningMotorReversed = false;
-    public static final boolean kRearLeftTurningMotorReversed = false;
-    public static final boolean kFrontLeftTurningMotorReversed = false;
+    public static final boolean kFrontRightTurningMotorReversed = true;
+    public static final boolean kRearRightTurningMotorReversed = true;
+    public static final boolean kRearLeftTurningMotorReversed = true;
+    public static final boolean kFrontLeftTurningMotorReversed = true;
 
-    //Before = false false true true = no turn yes straight
-    //true false false true = yes turn no straight
     public static final boolean kFrontRightDriveMotorReversed = true;
-    public static final boolean kRearRightDriveMotorReversed = false;
-    public static final boolean kRearLeftDriveMotorReversed = false;
-    public static final boolean kFrontLeftDriveMotorReversed = false;
+    public static final boolean kRearRightDriveMotorReversed = true;
+    public static final boolean kRearLeftDriveMotorReversed = true;
+    public static final boolean kFrontLeftDriveMotorReversed = true;
 
     //CAN IDs for Encoders on Swerve Modules
     public static final int kFrontRightAbsEncoderPort = 16;
@@ -74,10 +72,10 @@ public final class Constants {
     public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
 
     //Fix Front and rear left offsets
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(174-90);
-    public static final double kRearRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(5-90);
-    public static final double kRearLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(-10-90);
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(-4-90);
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//174
+    public static final double kRearRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//5
+    public static final double kRearLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//-10
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//-4
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = 0.533;
@@ -90,10 +88,10 @@ public final class Constants {
 
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
-            new Translation2d(kWheelBase / 2, kTrackWidth / 2), //+- = Front Right
-            new Translation2d(-kWheelBase / 2, kTrackWidth / 2), //++ = Front Left
-            new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //-- = Rear Right
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //-+ = Rear Left
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //+- = Front Right  ++
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2), //++ = Front Left  -+
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), //-- = Rear Right  +-
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); //-+ = Rear Left --
 
 
     public static final boolean kGyroReversed = false;
@@ -161,13 +159,6 @@ public final class Constants {
     public static final double kPModuleDriveController = 1;
   }
 
-  public static final class ShooterConstants {
-    //Sparkmax ports
-    public static final int kShooterMotorPort = 9;
-    //Speed percentage (scale of 0-1)
-    public static final double kShooterMotorSpeed = 0.8;
-  }
-
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kSecondaryControllerPort = 1;
@@ -180,30 +171,43 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kIntakeMotor = 10;
-    public static final double kIntakeMotorSpeed = 1; //value from 0-1
+    public static final int kIntakeMotor = 9;
+    public static final double kIntakeMotorSpeed = 0.4; //value from 0-1
+  }
+
+  public static final class ShooterConstants {
+    //Sparkmax ports
+    public static final int kShooterMotorPort = 10;
+    //Speed percentage (scale of 0-1)
+    public static final double kShooterMotorSpeed = 1.0;
   }
 
   public static final class PivotConstants {
     public static final int kPivotMotorRight = 11;
     public static final int kPivotMotorLeft = 12;
-    public static final double kPivotMotorSpeed = 0.95; //value from 0-1
+    public static final double kPivotMotorSpeed = 1.0; //value from 0-1
+    public static final double kPivotMotorAccel = 0.5;
 
-    public static final double kMaxPivotPosition = 850;
-    public static final double kMinPivotPosition = 80;
-    public static final double shootUpClosePosition = 300; //position of pivot encoder for shooting when up against the speaker
+    //Pivot Positions
+    public static final double kMaxPivotPosition = 180;
+    public static final double kMinPivotPosition = 45;
+    public static final double kAmpPosition = 92;
+    public static final double shootUpClosePosition = 160; //position of pivot encoder for shooting when up against the speaker
+    public static final double shootSideRingsPosition = 160;
 
-    public static final double kPivottOffset = 0.254;
+    public static final double kPivotOffset = 93.5;
+    public static final double disPerRot = 141;
+    public static final double pivotCompensation = 0.1;
     public static final double kPivotEncoderBreakpoint = 0.5;
 
-    public static final double kS_Pivot = 0.0;
-    public static final double kG_Pivot = 0.0;
-    public static final double kV_Pivot = 0.0;
-    public static final double kA_Pivot = 0.0;
+    public static final double kS_Pivot = 0.3;
+    public static final double kG_Pivot = 1.75;
+    public static final double kV_Pivot = 1.95;
+    public static final double kA_Pivot = 0.4;
 
-    public static final double kP_Pivot = 0.5;
-    public static final double kI_Pivot = 0.0;
-    public static final double kD_Pivot = 0.0;
+    public static final double kP_Pivot = 4.5;
+    public static final double kI_Pivot = 0.4;
+    public static final double kD_Pivot = 2.0;
 
     public static final double kAprilCamSpeedFactor = 0.05;
     public static final double kAprilCamMaxSpeedMetersPerSecond = 0.69;
@@ -211,8 +215,9 @@ public final class Constants {
     public static final double kAprilCamMinSpeed = 0.13;
 
     //TEST Simple goToSetpoint() method constants
-    public static final double tinyPivotSpeed = 0.1;
-    public static final double deadbandAngle = 3;
+    public static final double tinyPivotSpeed = 0.7;
+    public static final double tinyPivotAccel = 0.05;
+    public static final double deadbandAngle = 5;
 
     public static final double pivotSetpointFactor = 1;
   }
@@ -236,6 +241,33 @@ public final class Constants {
 
     //Radians
     public static final double camPitch = 0;
+
+    //Apriltag Megatag Botpose array positions
+    public static final int kMegaBotPoseTransX = 0;
+    public static final int kMegaBotPoseTransY = 1;
+    public static final int kMegaBotPoseTransZ = 2;
+    public static final int kMegaBotPoseRoll = 3;
+    public static final int kMegaBotPosePitch = 4;
+    public static final int kMegaBotPoseYaw = 5;
+  }
+
+  public static final class LimelightConstants {
+    public static final double klimelightOneHeight = 0.0;
+    public static final double klimelightOneAngleDeg = 0.0;
+
+    public static final int kledModePipeline = 0;
+    public static final int kledModeOff = 1;
+    public static final int kledModeBlink = 2;
+    public static final int kledModeOn = 3;
+
+    public static final int kcamModeVisionProcessor = 0;
+    public static final int kcamModeDriverCamera = 1;
+
+    public static final int kpipelineZero = 0;
+    public static final int kpipelineOne = 1;
+
+    public static final double klimelightTwoHeight = 0.0;
+    public static final double klimelightTwoAngleDeg = 0.0;
 
     //Apriltag Megatag Botpose array positions
     public static final int kMegaBotPoseTransX = 0;

@@ -247,7 +247,7 @@ public class Trajectories {
     public static final Trajectory goStraight =
     TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(),
+        List.of(new Translation2d(3, 0.1)),
         new Pose2d(3, 0, new Rotation2d(0)),
         config);
 }

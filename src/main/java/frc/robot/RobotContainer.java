@@ -38,7 +38,6 @@ import frc.robot.commands.AllForNaught;
 //Command Imports
 import frc.robot.commands.DriveToPointCmd;
 import frc.robot.commands.RumbleCmd;
-import frc.robot.commands.ShootDuringAutoCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.OTFTrajectoryFactory;
 import frc.robot.commands.SwerveControllerCmd;
@@ -102,8 +101,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    //Auto align the wheels before matches
-    robotDrive.initModulesReset(false);
+    //TEST Auto align the wheels before matches
+    //robotDrive.initModulesReset(false);
   
     // Configure default commands
 
@@ -132,8 +131,8 @@ public class RobotContainer {
     pivotSubsystem.setDefaultCommand(
       new PivotControllerCmd(
         pivotSubsystem, 
-        () -> operatorController.getLeftTriggerAxis(),
-        () -> operatorController.getRightTriggerAxis()));
+        () -> operatorController.getRightTriggerAxis(),
+        () -> operatorController.getLeftTriggerAxis()));
 
     climbSubsystem.setDefaultCommand(
       new ClimbControllerCmd(
@@ -141,37 +140,36 @@ public class RobotContainer {
         () -> false, 
         () -> false));
 
+    robotDrive.zeroHeading();
+    //robotDrive.initModulesReset(robotDrive.getGyroConnected());
 
     //lightingSubsystem.setDefaultCommand(lightingSubsystem.splitColor(Color.kAquamarine, Color.kDarkCyan));
 
 
 
     // Register Named Commands
-    //I think named commands = commands other than driving around that still need to be executed in auto
+    //Named commands = commands other than driving around that still need to be executed in auto
 
-    SequentialCommandGroup pivotToIntake = new SequentialCommandGroup(
-      new SetPivotCmd(pivotSubsystem, 0), 
-      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1));
-
-      SequentialCommandGroup pivotToShootUpClose = new SequentialCommandGroup(
-      new SetPivotCmd(pivotSubsystem, 1), 
-      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1));
+    Command pivotToIntake = new SetPivotCmd(pivotSubsystem, 0);
+    Command pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1);
+    Command intake = new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
 
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
     NamedCommands.registerCommand("Pivot To Shoot Up Close", pivotToShootUpClose);
     NamedCommands.registerCommand("Shoot", new ShootDuringAutoCmd(shooterSubsystem));
-
+    NamedCommands.registerCommand("Intake", intake);
 
 
     // Configure the button bindings
     configureButtonBindings();
 
-    Command goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
-
+    SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
     
 
     autoChooser = AutoBuilder.buildAutoChooser();
     autoChooser.addOption("Go Straight", goStraight);
+
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     //**Load in paths from Trajectories as drive commands using the AutoCommandFactory**
@@ -195,28 +193,21 @@ public class RobotContainer {
 
     
     //Intake ring
-    new JoystickButton(operatorController, Buttons.X).whileTrue(new IntakeCmd(intakeSubsystem, 
+    new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
       () -> IntakeConstants.kIntakeMotorSpeed, 1));
 
     //Outake ring
-    new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
+    new JoystickButton(operatorController, Buttons.X).whileTrue(new IntakeCmd(intakeSubsystem, 
       () -> IntakeConstants.kIntakeMotorSpeed, -1));
 
-    //Shoot out ring
-    new JoystickButton(operatorController, Buttons.Y).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
-      () -> true, () -> false));
+    //Set pivot position to intake
+    new POVButton(operatorController, Buttons.DOWN_ARR).whileTrue(new SetPivotCmd(pivotSubsystem, 0));
+    
+    //Set pivot position to shoot up close
+    new POVButton(operatorController, Buttons.RIGHT_ARR).whileTrue(new SetPivotCmd(pivotSubsystem, 1));
 
-    //Shoot in ring
-    new JoystickButton(operatorController, Buttons.A).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
-      () -> false, () -> true));
-
-
-  
-    // //Slow intake
-    // new POVButton(operatorController, Buttons.RIGHT_ARR).whileTrue(new IntakeCmd(intakeSubsystem, () -> (0.25), -1));
-
-    // //Slow outake
-    // new POVButton(operatorController, Buttons.LEFT_ARR).whileTrue(new IntakeCmd(intakeSubsystem, () -> (0.25), 1));
+    //Set pivot position to amp scoring
+    new POVButton(operatorController, Buttons.UP_ARR).whileTrue(new SetPivotCmd(pivotSubsystem, 2));
 
     //Climb expand
     new POVButton(driverController, Buttons.UP_ARR).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, () -> false));
@@ -285,11 +276,6 @@ public class RobotContainer {
     new JoystickButton(driverController, Buttons.R3).onTrue(new InstantCommand(() -> robotDrive.resetEncoders()));
 
   }
-
-  public void stopInitModuleReset() {
-    robotDrive.initModulesReset(true);
-  }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
