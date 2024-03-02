@@ -71,11 +71,11 @@ public final class Constants {
     public static final boolean kRearLeftDriveAbsoluteEncoderReversed = false;
     public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
 
-    //Fix Front and rear left offsets
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//174
-    public static final double kRearRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//5
-    public static final double kRearLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//-10
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//-4
+    //Fix Front and rear left offsets (radians)
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 0.04418;//174
+    public static final double kRearRightDriveAbsoluteEncoderOffsetRad = 0.4504;//5
+    public static final double kRearLeftDriveAbsoluteEncoderOffsetRad = 0.1489;//-10
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.1992;//-4
 
     // Distance between centers of right and left wheels on robot
     public static final double kTrackWidth = 0.533;
@@ -172,7 +172,7 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int kIntakeMotor = 9;
-    public static final double kIntakeMotorSpeed = 0.4; //value from 0-1
+    public static final double kIntakeMotorSpeed = 0.7; //value from 0-1
   }
 
   public static final class ShooterConstants {
@@ -190,14 +190,14 @@ public final class Constants {
 
     //Pivot Positions
     public static final double kMaxPivotPosition = 180;
-    public static final double kMinPivotPosition = 45;
+    public static final double kMinPivotPosition = 75;
     public static final double kAmpPosition = 92;
-    public static final double shootUpClosePosition = 160; //position of pivot encoder for shooting when up against the speaker
-    public static final double shootSideRingsPosition = 160;
+    public static final double shootUpClosePosition = 175; //position of pivot encoder for shooting when up against the speaker
+    public static final double shootSideRingsPosition = 170;
 
-    public static final double kPivotOffset = 93.5;
-    public static final double disPerRot = 141;
-    public static final double pivotCompensation = 0.1;
+    public static final double kPivotOffset = 181;
+    public static final double disPerRot = 360;
+    public static final double pivotCompensation = 0.08;
     public static final double kPivotEncoderBreakpoint = 0.5;
 
     public static final double kS_Pivot = 0.3;
@@ -205,9 +205,9 @@ public final class Constants {
     public static final double kV_Pivot = 1.95;
     public static final double kA_Pivot = 0.4;
 
-    public static final double kP_Pivot = 4.5;
-    public static final double kI_Pivot = 0.4;
-    public static final double kD_Pivot = 2.0;
+    public static final double kP_Pivot = 0.5;
+    public static final double kI_Pivot = 0.01;
+    public static final double kD_Pivot = 0.2;
 
     public static final double kAprilCamSpeedFactor = 0.05;
     public static final double kAprilCamMaxSpeedMetersPerSecond = 0.69;
@@ -217,7 +217,7 @@ public final class Constants {
     //TEST Simple goToSetpoint() method constants
     public static final double tinyPivotSpeed = 0.7;
     public static final double tinyPivotAccel = 0.05;
-    public static final double deadbandAngle = 5;
+    public static final double deadbandAngle = 8;
 
     public static final double pivotSetpointFactor = 1;
   }
@@ -225,7 +225,7 @@ public final class Constants {
   public static final class ClimbConstants {
     public static final int kClimbMotorRight = 13;
     public static final int kClimbMotorLeft = 14;
-    public static final double kClimbMotorSpeed = 0.3; //value from 0-1
+    public static final double kClimbMotorSpeed = 0.6; //value from 0-1
   }
   
   public static final class CameraConstants {

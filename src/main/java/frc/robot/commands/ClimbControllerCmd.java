@@ -13,13 +13,15 @@ import frc.robot.subsystems.ClimbSubsystem;
 public class ClimbControllerCmd extends Command{
 
   private final ClimbSubsystem climbSubsystem;
-  private final Supplier<Boolean> climbPositiveDirFunction;
-  private final Supplier<Boolean> climbNegativeDirFunction;
+  private final Supplier<Boolean> climbDirFunction;
+  private final boolean up;
+  private final String which;
 
-  public ClimbControllerCmd(ClimbSubsystem climbSubsystem, Supplier<Boolean> climbPositiveDirFunction, Supplier<Boolean> climbNegativeDirFunction) {
+  public ClimbControllerCmd(ClimbSubsystem climbSubsystem, Supplier<Boolean> climbDirFunction, boolean up, String which) {
     this.climbSubsystem = climbSubsystem;
-    this.climbPositiveDirFunction = climbPositiveDirFunction;
-    this.climbNegativeDirFunction = climbNegativeDirFunction;
+    this.climbDirFunction = climbDirFunction;
+    this.up = up;
+    this.which = which;
 
     addRequirements(climbSubsystem);
   }
@@ -32,20 +34,34 @@ public class ClimbControllerCmd extends Command{
   public void execute() {
     
     //is the button pressed
-    boolean positiveDir = climbPositiveDirFunction.get();
-    boolean negativeDir = climbNegativeDirFunction.get();
+    boolean dir = climbDirFunction.get();
 
     double velocity = 0;
 
-    if(positiveDir) {
-      velocity = ClimbConstants.kClimbMotorSpeed;
-    } else if(negativeDir) {
-      velocity = -1 * ClimbConstants.kClimbMotorSpeed;
+    if(dir) {
+      if(up) {
+        velocity = ClimbConstants.kClimbMotorSpeed;
+        if(which.equals("left")) {
+          climbSubsystem.setLeftClimbMotor(velocity);
+        } else if(which.equals("right")){
+          climbSubsystem.setRightClimbMotor(velocity);
+        } else if(which.equals("both")){
+          climbSubsystem.setRightClimbMotor(velocity);
+          climbSubsystem.setLeftClimbMotor(velocity);
+        }
+      } else {
+          velocity = -1 * ClimbConstants.kClimbMotorSpeed;
+          if(which.equals("left")) {
+            climbSubsystem.setLeftClimbMotor(velocity);
+          } else if(which.equals("right")) {
+            climbSubsystem.setRightClimbMotor(velocity);
+          } else if (which.equals("both")) {
+            climbSubsystem.setRightClimbMotor(velocity);
+            climbSubsystem.setLeftClimbMotor(velocity);
+          }
+      }
     }
-
-    climbSubsystem.setClimbMotor(velocity);
   }
-
 
   @Override
   public void end(boolean interrupted) {

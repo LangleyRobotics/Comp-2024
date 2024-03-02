@@ -12,7 +12,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,7 +32,9 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.Buttons;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.AllForNaught;
 //import frc.robot.Trajectories;
@@ -38,7 +42,6 @@ import frc.robot.commands.AllForNaught;
 //Command Imports
 import frc.robot.commands.DriveToPointCmd;
 import frc.robot.commands.RumbleCmd;
-import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.OTFTrajectoryFactory;
 import frc.robot.commands.SwerveControllerCmd;
 import frc.robot.commands.ShooterControllerCmd;
@@ -55,7 +58,8 @@ import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 
 //Auto Commands
-import frc.robot.commands.ShootDuringAutoCmd;
+import frc.robot.commands.ShootCmd;
+import frc.robot.commands.IntakeCmd;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -119,8 +123,8 @@ public class RobotContainer {
     shooterSubsystem.setDefaultCommand(
       new ShooterControllerCmd(
         shooterSubsystem,
-        () -> operatorController.getRightBumper(),
-        () -> operatorController.getLeftBumper()));
+        () -> operatorController.getYButton(),
+        () -> operatorController.getAButton()));
 
     intakeSubsystem.setDefaultCommand(
       new IntakeCmd(
@@ -138,10 +142,11 @@ public class RobotContainer {
       new ClimbControllerCmd(
         climbSubsystem, 
         () -> false, 
-        () -> false));
+        false,
+        "none"));
 
     robotDrive.zeroHeading();
-    //robotDrive.initModulesReset(robotDrive.getGyroConnected());
+    //robotDrive.initModulesReset();
 
     //lightingSubsystem.setDefaultCommand(lightingSubsystem.splitColor(Color.kAquamarine, Color.kDarkCyan));
 
@@ -150,13 +155,30 @@ public class RobotContainer {
     // Register Named Commands
     //Named commands = commands other than driving around that still need to be executed in auto
 
-    Command pivotToIntake = new SetPivotCmd(pivotSubsystem, 0);
-    Command pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1);
+    ParallelCommandGroup pivotToIntake = new ParallelCommandGroup(
+      new SetPivotCmd(pivotSubsystem, 0),
+      new WaitCommand(1.5));
+
+    ParallelCommandGroup pivotToShootUpClose = new ParallelCommandGroup (
+      new SetPivotCmd(pivotSubsystem, 1),
+      new WaitCommand(2.5));
+
     Command intake = new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
+    
+    SequentialCommandGroup shoot = new SequentialCommandGroup(
+      new ShootCmd(shooterSubsystem, false),
+      new WaitCommand(3),
+      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1),
+      new WaitCommand(2),
+      new IntakeCmd(intakeSubsystem, () -> 0.0, 1),
+      new ShootCmd(shooterSubsystem, true));
+
+
+
 
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
     NamedCommands.registerCommand("Pivot To Shoot Up Close", pivotToShootUpClose);
-    NamedCommands.registerCommand("Shoot", new ShootDuringAutoCmd(shooterSubsystem));
+    NamedCommands.registerCommand("Shoot", shoot);
     NamedCommands.registerCommand("Intake", intake);
 
 
@@ -194,11 +216,23 @@ public class RobotContainer {
     
     //Intake ring
     new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
-      () -> IntakeConstants.kIntakeMotorSpeed, 1));
+      () -> IntakeConstants.kIntakeMotorSpeed, -1));
 
     //Outake ring
     new JoystickButton(operatorController, Buttons.X).whileTrue(new IntakeCmd(intakeSubsystem, 
-      () -> IntakeConstants.kIntakeMotorSpeed, -1));
+      () -> IntakeConstants.kIntakeMotorSpeed, 1));
+
+
+
+    //Shoot in ring
+    new JoystickButton(operatorController, Buttons.LB).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
+    () -> true, () -> false));
+
+    //Shoot out ring
+    new JoystickButton(operatorController, Buttons.RB).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
+    () -> false, () -> true));
+
+
 
     //Set pivot position to intake
     new POVButton(operatorController, Buttons.DOWN_ARR).whileTrue(new SetPivotCmd(pivotSubsystem, 0));
@@ -209,12 +243,25 @@ public class RobotContainer {
     //Set pivot position to amp scoring
     new POVButton(operatorController, Buttons.UP_ARR).whileTrue(new SetPivotCmd(pivotSubsystem, 2));
 
-    //Climb expand
-    new POVButton(driverController, Buttons.UP_ARR).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, () -> false));
-    
-    //Climb collapse
-    new POVButton(driverController, Buttons.DOWN_ARR).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> false, () -> true));
 
+
+    //Climb expand right
+    new JoystickButton(driverController, Buttons.Y).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, true, "right"));
+    
+    //Climb collapse right
+    new JoystickButton(driverController, Buttons.A).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, false, "right"));
+
+    //Climb expand left
+    new POVButton(driverController, Buttons.UP_ARR).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, true, "left"));
+    
+    //Climb collapse left
+    new POVButton(driverController, Buttons.DOWN_ARR).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, false, "left"));
+
+    //Climb expand both
+    new JoystickButton(driverController, Buttons.RB).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, true, "both"));
+
+    //Climb collapse both
+    new JoystickButton(driverController, Buttons.LB).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, false, "both"));
 
 
     //Intake and shoot
@@ -237,7 +284,7 @@ public class RobotContainer {
 
 
     //Rumble controllers
-    new JoystickButton(driverController, Buttons.LB).whileTrue(new RumbleCmd(operatorController, 1, 1.00));
+    new JoystickButton(driverController, Buttons.Maria).whileTrue(new RumbleCmd(operatorController, 1, 1.00));
     new JoystickButton(operatorController, Buttons.L3).whileTrue(new RumbleCmd(driverController, 1, 1.00));
     new JoystickButton(operatorController, Buttons.R3).whileTrue(new RumbleCmd(driverController, 2, 1.00));
 

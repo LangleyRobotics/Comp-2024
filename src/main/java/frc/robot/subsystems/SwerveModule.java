@@ -190,4 +190,10 @@ public class SwerveModule {
     driveMotor.set(0);
     turningMotor.set(0);
   }
+
+  public void resetInitModule(SwerveModuleState desState, double desAngle) {
+    while(Math.abs(getAbsoluteEncoderRad() - desAngle) > 5) {
+      setDesiredState(desState);
+    }
+  }
 }

@@ -424,23 +424,24 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   //TEST Realign wheels at the start of each match
-  public void initModulesReset(boolean go) {
-    if(go) {
-      double frontRightInitAngle = frontRight.getAbsoluteEncoderRad();
-      SwerveModuleState frontRightDesAngle = new SwerveModuleState(0.001, new Rotation2d(DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad));
-      frontRight.setDesiredState(frontRightDesAngle);
+  public void initModulesReset() {
+    double frontRightDesAngle = DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad;
+    SwerveModuleState frontRightDesState = new SwerveModuleState(0.001, new Rotation2d(frontRightDesAngle));
+    frontRight.resetInitModule(frontRightDesState, frontRightDesAngle);
 
-      SwerveModuleState rearRightDesAngle = new SwerveModuleState(0.001, new Rotation2d(DriveConstants.kRearRightDriveAbsoluteEncoderOffsetRad));
-      rearRight.setDesiredState(rearRightDesAngle);
+    double rearRightDesAngle = DriveConstants.kRearRightDriveAbsoluteEncoderOffsetRad;
+    SwerveModuleState rearRightDesState = new SwerveModuleState(0.001, new Rotation2d(rearRightDesAngle));
+    rearRight.resetInitModule(rearRightDesState, rearRightDesAngle);
 
-      SwerveModuleState rearLeftDesAngle = new SwerveModuleState(0.001, new Rotation2d(DriveConstants.kRearLeftDriveAbsoluteEncoderOffsetRad));
-      rearLeft.setDesiredState(rearLeftDesAngle);
+    double rearLeftDesAngle = DriveConstants.kRearLeftDriveAbsoluteEncoderOffsetRad;
+    SwerveModuleState rearLeftDesState = new SwerveModuleState(0.001, new Rotation2d(rearLeftDesAngle));
+    rearLeft.resetInitModule(rearLeftDesState, rearLeftDesAngle);
 
-      SwerveModuleState frontLeftDesAngle = new SwerveModuleState(0.001, new Rotation2d(DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad));
-      frontLeft.setDesiredState(frontLeftDesAngle);
+    double frontLeftDesAngle = DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad;
+    SwerveModuleState frontLeftDesState = new SwerveModuleState(0.001, new Rotation2d(frontLeftDesAngle));
+    frontLeft.resetInitModule(frontLeftDesState, frontLeftDesAngle);
 
-      System.out.println("Init Module Reset Test");
-    }
+    System.out.println("Init Module Reset Test");
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {

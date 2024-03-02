@@ -32,17 +32,12 @@ public class SetPivotCmd extends Command {
     if(position == 0) {
       //**Intake position**
       pivotSubsystem.goToSetpoint(PivotConstants.kMaxPivotPosition);
-      //pivotSubsystem.pivotWithFeedforwardPID(PivotConstants.kMinPivotPosition, PivotConstants.tinyPivotSpeed, PivotConstants.tinyPivotAccel, 0);
-   
     } else if (position == 1) {
       //**Shoot position for up close**
       pivotSubsystem.goToSetpoint(PivotConstants.shootUpClosePosition);
-      //pivotSubsystem.pivotWithFeedforwardPID(PivotConstants.shootUpClosePosition, PivotConstants.tinyPivotSpeed, PivotConstants.tinyPivotAccel, 0);
-   
     } else if (position == 2) {
       //**Amp scoring position**
       pivotSubsystem.goToSetpoint(PivotConstants.kAmpPosition);
-      //pivotSubsystem.pivotWithFeedforwardPID(PivotConstants.kAmpPosition, PivotConstants.tinyPivotSpeed, PivotConstants.tinyPivotAccel, 0);
     }
   }
 

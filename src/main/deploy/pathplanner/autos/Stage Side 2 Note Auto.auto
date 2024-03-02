@@ -18,9 +18,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "Pivot To Intake"
           }
         },
         {
@@ -31,12 +31,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Stage Side Straight Path"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pivot To Intake"
                 }
               },
               {

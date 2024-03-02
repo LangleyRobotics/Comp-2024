@@ -73,33 +73,34 @@ public class PivotControllerCmd extends Command{
 
       //**Pivot toward intake position**
       if(pivotPositiveDirFunction.get() > 0) {
-        //pivotSubsystem.pivotWithFeedforwardPID(Math.PI, velocity, PivotConstants.kPivotMotorAccel, 90);
-        if(pivotSubsystem.getPivotAbsEncoder() > 90) {
-          pivotSubsystem.setPivotMotorNoBounds(0.3);
-        } else if(pivotSubsystem.getPivotAbsEncoder() < 45) {
-            pivotSubsystem.setPivotMotorNoBounds(0.05);
-        } else {
-          pivotSubsystem.setPivotMotorNoBounds(0.15);
-        }
+        pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder() - 5);
+        // if(pivotSubsystem.getPivotAbsEncoder() > 90) {
+        //   pivotSubsystem.setPivotMotorNoBounds(0.3);
+        // } else if(pivotSubsystem.getPivotAbsEncoder() < 45) {
+        //     pivotSubsystem.setPivotMotorNoBounds(0.05);
+        // } else {
+        //   pivotSubsystem.setPivotMotorNoBounds(0.15);
+        // }
       } 
       
       
       //**Pivot toward amp position**
       else if(pivotNegativeDirFunction.get() > 0) {
-        //pivotSubsystem.pivotWithFeedforwardPID(Math.PI / -4, velocity, PivotConstants.kPivotMotorAccel, 90);
-        if(pivotSubsystem.getPivotAbsEncoder() < 90) {
-          pivotSubsystem.setPivotMotorNoBounds(-0.3);
-        } else if(pivotSubsystem.getPivotAbsEncoder() > 115) {
-            pivotSubsystem.setPivotMotorNoBounds(0);
-        } else {
-          pivotSubsystem.setPivotMotorNoBounds(-0.15);
-        }
+        pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder() + 5);
+        // if(pivotSubsystem.getPivotAbsEncoder() < 90) {
+        //   pivotSubsystem.setPivotMotorNoBounds(-0.3);
+        // } else if(pivotSubsystem.getPivotAbsEncoder() > 115) {
+        //     pivotSubsystem.setPivotMotorNoBounds(0);
+        // } else {
+        //   pivotSubsystem.setPivotMotorNoBounds(-0.15);
+        // }
       }
       
       
       //**Keep arm in place when no controller input**
       else {
-        pivotSubsystem.setPivotMotorNoBounds(MathMethods.signDouble(Math.cos(pivotSubsystem.getPivotAbsEncoder()))*0.02-PivotConstants.pivotCompensation * Math.cos(Math.toRadians(pivotSubsystem.getPivotAbsEncoder())));
+        //pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder());
+        pivotSubsystem.setPivotMotorNoBounds(MathMethods.signDouble(Math.cos(pivotSubsystem.getPivotAbsEncoder()))*0.02 - PivotConstants.pivotCompensation * Math.cos(Math.toRadians(pivotSubsystem.getPivotAbsEncoder())));
       }
     }
 
