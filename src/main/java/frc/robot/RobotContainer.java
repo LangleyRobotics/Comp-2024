@@ -50,12 +50,7 @@ import frc.robot.commands.ClimbControllerCmd;
 import frc.robot.commands.SetPivotCmd;
 
 //Subsystem Imports
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.*;
 
 //Auto Commands
 import frc.robot.commands.ShootCmd;
@@ -85,7 +80,7 @@ import edu.wpi.first.wpilibj.util.Color;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem robotDrive = new DriveSubsystem();
-  private final CameraSubsystem cameraSubsystem = new CameraSubsystem();
+  private final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();

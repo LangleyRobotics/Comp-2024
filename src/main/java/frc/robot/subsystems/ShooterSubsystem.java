@@ -24,10 +24,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Motor Velocity", shooterMotor.get());
   }
 
-  public void setShooterMotor(double velocity) {
+  public void setShooterMotor(double percentage) {
   
     try {
-      shooterMotor.set(velocity);
+      shooterMotor.set(percentage);
 
     } catch(Exception e) {
         System.out.println("Error: Shooter Motor exception:" + e.toString());

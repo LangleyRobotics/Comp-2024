@@ -52,6 +52,7 @@ public class LimelightSubsystem extends SubsystemBase{
 //        double y = getTargetOffsetY();
 //        double area = getTargetArea();
 //        boolean targetInView = targetInView();
+        SmartDashboard.putNumber("AprilTag Distance", getDistanceToTarget());
     }
 
     public double getDistanceToTarget() {
