@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.MathMethods;
 
 
 public class LimelightSubsystem extends SubsystemBase{
@@ -45,35 +48,20 @@ public class LimelightSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         //read values periodically
-        double x = getTargetOffsetX();
-        double y = getTargetOffsetY();
-        double area = getTargetArea();
-        boolean targetInView = targetInView();
-        double[] LL_botpose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-        // //post to smart dashboard periodically
-        // SmartDashboard.putNumber("LimelightX", x);
-        // SmartDashboard.putNumber("LimelightY", y);
-        // SmartDashboard.putNumber("LimelightArea", area);
-        // SmartDashboard.putBoolean("Limelight Target in view", targetInView);
-        // SmartDashboard.putBoolean("Driver Mode", isDriverMode());
-        // SmartDashboard.putBoolean("Vision Mode ", isVisionMode());
-        // //put botpose values in smart dashboard
-        // try {
-        //   SmartDashboard.putNumber(" Translation BotPose X", LL_botpose[0]);
-        //   SmartDashboard.putNumber("Translation BotPose Y", LL_botpose[1]);
-        //   SmartDashboard.putNumber("Translation BotPose Z", LL_botpose[2]);
-        //   SmartDashboard.putNumber("Rotation BotPose Roll", LL_botpose[3]);
-        //   SmartDashboard.putNumber("Rotation BotPose Pitch", LL_botpose[4]);
-        //   SmartDashboard.putNumber("Rotation BotPose Yaw", LL_botpose[5]);
-        // } catch(Exception e) {
-        //   SmartDashboard.putNumber(" Translation BotPose X", 0);
-        //   SmartDashboard.putNumber("Translation BotPose Y", 0);
-        //   SmartDashboard.putNumber("Translation BotPose Z", 0);
-        //   SmartDashboard.putNumber("Rotation BotPose Roll", 0);
-        //   SmartDashboard.putNumber("Rotation BotPose Pitch", 0);
-        //   SmartDashboard.putNumber("Rotation BotPose Yaw", 0);
-        // }
+//        double x = getTargetOffsetX();
+//        double y = getTargetOffsetY();
+//        double area = getTargetArea();
+//        boolean targetInView = targetInView();
+        SmartDashboard.putNumber("AprilTag Distance", getDistanceToTarget());
+    }
 
+    public double getDistanceToTarget() {
+        if(!targetInView()) return 0; // will return 0 if not in view
+
+        // Find robot position to tag
+        double[] botposeTargetSpace = getBotPoseTargetSpace();
+        Pose3d botPositionFromTag = new Pose3d(botposeTargetSpace[0], botposeTargetSpace[1], botposeTargetSpace[2], new Rotation3d(botposeTargetSpace[3], botposeTargetSpace[4], botposeTargetSpace[5]));
+        return Math.sqrt( Math.pow(botPositionFromTag.getX(), 2) + Math.pow(botPositionFromTag.getY(), 2) + Math.pow(botPositionFromTag.getZ(), 2) );
     }
 
     public double getTargetOffsetX()
@@ -86,9 +74,9 @@ public class LimelightSubsystem extends SubsystemBase{
       return ty.getDouble(0.0);
     }
   
-    public double[] get_LL_botpose()
+    public double[] getBotPoseTargetSpace()
     {
-      return NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+      return NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace").getDoubleArray(new double[6]);
     }
 
     public boolean targetInView()
