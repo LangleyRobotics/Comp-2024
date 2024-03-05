@@ -14,10 +14,24 @@ public class SetPivotCmd extends Command {
   
   private final PivotSubsystem pivotSubsystem;
   private final int position;
+  private final double targetPosition;
 
   public SetPivotCmd(PivotSubsystem pivotSubsystem, int position) {
     this.pivotSubsystem = pivotSubsystem;
     this.position = position;
+
+    if(position == 0) {
+      //**Intake position**
+      this.targetPosition = PivotConstants.kMaxPivotPosition;
+    } else if (position == 1) {
+      //**Shoot position for up close**
+      this.targetPosition = PivotConstants.shootUpClosePosition;
+    } else if (position == 2) {
+      //**Amp scoring position**
+      this.targetPosition = PivotConstants.kAmpPosition;
+    } else {
+      this.targetPosition = PivotConstants.kMaxPivotPosition;
+    }
 
     addRequirements(pivotSubsystem);
   }
@@ -29,16 +43,7 @@ public class SetPivotCmd extends Command {
 
   @Override
   public void execute() {
-    if(position == 0) {
-      //**Intake position**
-      pivotSubsystem.goToSetpoint(PivotConstants.kMaxPivotPosition);
-    } else if (position == 1) {
-      //**Shoot position for up close**
-      pivotSubsystem.goToSetpoint(PivotConstants.shootUpClosePosition);
-    } else if (position == 2) {
-      //**Amp scoring position**
-      pivotSubsystem.goToSetpoint(PivotConstants.kAmpPosition);
-    }
+      pivotSubsystem.goToSetpoint(this.targetPosition);
   }
 
   @Override
@@ -48,6 +53,6 @@ public class SetPivotCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return pivotSubsystem.isAtSetpoint();
   }
 }

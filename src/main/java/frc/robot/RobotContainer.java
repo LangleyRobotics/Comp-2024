@@ -315,7 +315,7 @@ public class RobotContainer {
     // () -> (-MathMethods.speedMax2(0.05*limelightSubsystem.getTargetOffsetXLow(), 0.3, 0.02)),
     // () -> (0.0), ()->(false),  () -> false));
     
-    new JoystickButton(driverController, Buttons.R3).onTrue(new InstantCommand(() -> robotDrive.resetEncoders()));
+    new JoystickButton(driverController, Buttons.B).onTrue(new InstantCommand(() -> robotDrive.resetEncoders()));
 
   }
 
