@@ -172,7 +172,7 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int kIntakeMotor = 9;
-    public static final double kIntakeMotorSpeed = 0.7; //value from 0-1
+    public static final double kIntakeMotorSpeed = 0.4; //value from 0-1
   }
 
   public static final class ShooterConstants {
@@ -182,6 +182,10 @@ public final class Constants {
     public static final double kShooterMotorSpeed = 1.0;
   }
 
+  public static final class TrapConstants {
+    public static final  int kTrapMotorPort = 15;
+    public static final  double kTrapSpeed = 0.3;
+  }
   public static final class PivotConstants {
     public static final int kPivotMotorRight = 11;
     public static final int kPivotMotorLeft = 12;
@@ -226,6 +230,8 @@ public final class Constants {
     public static final int kClimbMotorRight = 13;
     public static final int kClimbMotorLeft = 14;
     public static final double kClimbMotorSpeed = 0.6; //value from 0-1
+
+    public static final double encoderUpperLimit = 1000;
   }
   
   public static final class CameraConstants {

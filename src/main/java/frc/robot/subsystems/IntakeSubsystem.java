@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotor, MotorType.kBrushless);
-    private final DigitalInput colorSensor = new DigitalInput(3);
+    private final DigitalInput colorSensor = new DigitalInput(1);
 
 
     //private I2C sensor = new I2C(null, 0);

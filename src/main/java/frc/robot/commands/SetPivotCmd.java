@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.ShooterLookupTable;
 
 //Set pivot to specific setpoints (intake, shoot up close, amp scoring)
 
@@ -43,7 +44,7 @@ public class SetPivotCmd extends Command {
 
   @Override
   public void execute() {
-      pivotSubsystem.goToSetpoint(this.targetPosition);
+      pivotSubsystem.goToSetpoint(targetPosition);
   }
 
   @Override

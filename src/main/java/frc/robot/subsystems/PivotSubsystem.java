@@ -86,7 +86,7 @@ public class PivotSubsystem extends SubsystemBase {
     public void goToSetpoint(double desPosition) {
         //desPosition = radians
         double output = pivotPIDController.calculate(getPivotAbsEncoder(), desPosition);
-        if(output > 0 && getPivotAbsEncoder() >= 135) { 
+        if(output > 0 && getPivotAbsEncoder() >= 155) { 
             System.out.println("Forward limiting");
             // pivot going forward, slow so doesnt hit ground
             pivotMotorRight.setVoltage(-0.4);

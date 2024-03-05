@@ -48,6 +48,7 @@ import frc.robot.commands.ShooterControllerCmd;
 import frc.robot.commands.PivotControllerCmd;
 import frc.robot.commands.ClimbControllerCmd;
 import frc.robot.commands.SetPivotCmd;
+import frc.robot.commands.AutoAlignShootCmd;
 
 //Subsystem Imports
 import frc.robot.subsystems.*;
@@ -118,8 +119,8 @@ public class RobotContainer {
     shooterSubsystem.setDefaultCommand(
       new ShooterControllerCmd(
         shooterSubsystem,
-        () -> operatorController.getYButton(),
-        () -> operatorController.getAButton()));
+        () -> operatorController.getRightBumper(),
+        () -> operatorController.getLeftBumper()));
 
     intakeSubsystem.setDefaultCommand(
       new IntakeCmd(
@@ -207,7 +208,7 @@ public class RobotContainer {
 
 
 
-
+    
     
     //Intake ring
     new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
@@ -237,6 +238,10 @@ public class RobotContainer {
 
     //Set pivot position to amp scoring
     new POVButton(operatorController, Buttons.UP_ARR).whileTrue(new SetPivotCmd(pivotSubsystem, 2));
+
+
+    //Autoalign pivot
+    new POVButton(operatorController, Buttons.LEFT_ARR).whileTrue(new AutoAlignShootCmd(limelightSubsystem, pivotSubsystem, shooterSubsystem));
 
 
 
