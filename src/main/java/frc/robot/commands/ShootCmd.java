@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -20,17 +21,18 @@ public class ShootCmd extends Command {
   }
 
   @Override
-  public void initialize() {}
-
-  @Override
-  public void execute() {
-    if(finished) {
+  public void initialize() {
+   if(finished) {
       shooterSubsystem.setShooterMotor(0.0);
     } else {
-      shooterSubsystem.setShooterMotor(ShooterConstants.kShooterMotorSpeed);
-    }
-  }
+      shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
 
+    
+  }
+}
+  @Override
+  public void execute() {}
+    
   @Override
   public void end(boolean interrupted) {
     shooterSubsystem.stopShooterMotor();
@@ -38,6 +40,6 @@ public class ShootCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

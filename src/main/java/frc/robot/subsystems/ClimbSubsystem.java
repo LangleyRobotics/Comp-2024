@@ -24,10 +24,10 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setRightClimbMotor(double velocity){
-        // if(!rightLimitSwitch.get()) {
+        // if(!rightLimitSwitch.get()&&velocity<0) {
         //     climbMotorRight.set(0);
         //     climbMotorRight.getEncoder().setPosition(0);
-        // // } else if(velocity > 0 && climbMotorRight.getEncoder().getPosition() > ClimbConstants.encoderUpperLimit) {
+        // // } else if(velocity > 0 && climbMotorRight.getEncoder().getPosition() >= ClimbConstants.encoderUpperLimit) {
         // //     climbMotorRight.set(0);
         // } else {
             climbMotorRight.set(velocity);
@@ -35,7 +35,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setLeftClimbMotor(double velocity){
-        // if(!leftLimitSwitch.get()) {
+        // if(!leftLimitSwitch.get()&&velocity<0) {
         //     climbMotorLeft.set(0);
         //     climbMotorLeft.getEncoder().setPosition(0);
         // // } else if(velocity > 0 && climbMotorLeft.getEncoder().getPosition() > ClimbConstants.encoderUpperLimit) {

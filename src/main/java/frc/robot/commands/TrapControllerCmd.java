@@ -30,10 +30,10 @@ public class TrapControllerCmd extends Command {
   public void execute() {
     boolean run = trapTurn.get();
     if(run){
-      if(forward){
+      if(forward) {
         trap.setTrap(TrapConstants.kTrapSpeed);
       }
-      else{
+      else {
         trap.setTrap(-TrapConstants.kTrapSpeed);
       }
     }

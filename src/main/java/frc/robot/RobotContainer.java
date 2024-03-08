@@ -162,14 +162,14 @@ public class RobotContainer {
     Command intake = new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
     
     SequentialCommandGroup shoot = new SequentialCommandGroup(
-      new ShootCmd(shooterSubsystem, false),
-      new WaitCommand(3),
+      new ShootCmd(shooterSubsystem,false),
+      new WaitCommand(2),
       new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1),
       new WaitCommand(2),
       new IntakeCmd(intakeSubsystem, () -> 0.0, 1),
       new ShootCmd(shooterSubsystem, true));
 
-
+ 
 
 
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
@@ -181,17 +181,27 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+
     SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
-    
+    SequentialCommandGroup backAutoRedLeft = robotDrive.AutoCommandFactory(Trajectories.backAutoRedLeft);
+    SequentialCommandGroup oneNote =new SequentialCommandGroup(pivotToIntake,shoot,goStraight);
 
     autoChooser = AutoBuilder.buildAutoChooser();
     autoChooser.addOption("Go Straight", goStraight);
+    autoChooser.addOption("TEST Forward Auto Red Left", backAutoRedLeft);
+    autoChooser.addOption("One Note Auto", oneNote);
+    
 
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     //**Load in paths from Trajectories as drive commands using the AutoCommandFactory**
 
+
+
+
+
+    SmartDashboard.putBoolean("April Tag Dist Zero???", limelightSubsystem.getDistanceToTarget() < 0.5);
   }
 
   /**

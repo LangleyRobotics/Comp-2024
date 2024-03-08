@@ -13,6 +13,7 @@ import frc.robot.MathMethods;
 
 public class LimelightSubsystem extends SubsystemBase{
     private static LimelightSubsystem instance;
+    private double[] dis={1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65,1.65};
     private NetworkTable table;
     private NetworkTableEntry tx;
     private NetworkTableEntry ty;
@@ -53,8 +54,37 @@ public class LimelightSubsystem extends SubsystemBase{
 //        double area = getTargetArea();
 //        boolean targetInView = targetInView();
         SmartDashboard.putNumber("AprilTag Distance", getDistanceToTarget());
+        SmartDashboard.putNumber("AprilTag Mean Distance", mean());
+        double temp = getDistanceToTarget();
+        if(temp!=0){
+          if(System.currentTimeMillis()%1000<100){
+            dis[0]=temp;
+          }else if(System.currentTimeMillis()%1000<200){
+            dis[1]=temp;
+          }else if(System.currentTimeMillis()%1000<300){
+            dis[2]=temp;
+          }else if(System.currentTimeMillis()%1000<400){
+            dis[3]=temp;
+          }else if(System.currentTimeMillis()%1000<500){
+            dis[4]=temp;
+          }else if(System.currentTimeMillis()%1000<600){
+            dis[5]=temp;
+          }else if(System.currentTimeMillis()%1000<700){
+            dis[6]=temp;
+          }else if(System.currentTimeMillis()%1000<800){
+            dis[7]=temp;
+          }else if(System.currentTimeMillis()%1000<900){
+            dis[8]=temp;
+          }else{
+            dis[9]=temp;
+          }
+        }
     }
-
+    public double mean(){
+        return (dis[0]+dis[1]+dis[2]+dis[3]+dis[4]+dis[5]+
+        dis[6]+dis[7] +dis[8]+dis[9])/10;   
+      }
+      
     public double getDistanceToTarget() {
         if(!targetInView()) return 0; // will return 0 if not in view
 

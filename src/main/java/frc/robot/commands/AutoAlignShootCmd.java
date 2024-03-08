@@ -34,14 +34,18 @@ public class AutoAlignShootCmd extends Command {
 
   @Override
   public void execute() {
-    double distance = Math.round(limelightSubsystem.getDistanceToTarget()*10)/10;
+    double distance = Math.round(limelightSubsystem.mean()*10)/10;
+
+
     ActionSetpoint pair = shooterLookupTable.get(distance);
 
     // double rpm = ShooterConstants.kShooterMotorSpeed;
     double rpm = -pair.getShooterRPM();
-    double angle = pair.getPivotAngle();
+    double angle = pair.getPivotAngle() - 9;
+    
 
     SmartDashboard.putNumber("Auto Align Des Angle", angle);
+    SmartDashboard.putBoolean("April Tag Distance Zero???", distance != 0.0);
 
     shooterSubsystem.setShooterMotor(rpm);
     if(distance != 0.0) {

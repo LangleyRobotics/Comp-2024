@@ -12,7 +12,8 @@ import frc.robot.Constants.PivotConstants;
 import frc.robot.MathMethods;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
-
+import frc.robot.commands.MoveToSetPointCmd;
+import frc.robot.subsystems.GoodPivot;
 /*
  * NOTE:
  * 0 degrees = arm back parallel to ground
