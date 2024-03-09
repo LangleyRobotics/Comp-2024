@@ -5,13 +5,13 @@ import java.util.function.Supplier;
 
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeCmd extends Command{
+public class IntakeAutoCmd extends Command{
     private final IntakeSubsystem intakeSubsystem;
     private final Supplier<Double> speedSupplier;
     //direction int is negative 1 or 1.
     private final int direction;
 
-    public IntakeCmd(IntakeSubsystem intakeSubsystem, Supplier<Double> speedSupplier, int direction) {
+    public IntakeAutoCmd(IntakeSubsystem intakeSubsystem, Supplier<Double> speedSupplier, int direction) {
         this.intakeSubsystem = intakeSubsystem;
         this.speedSupplier = speedSupplier;
         this.direction = direction;
@@ -31,11 +31,11 @@ public class IntakeCmd extends Command{
         double velocity = speed*dir;
 
         intakeSubsystem.setIntakeMotor(velocity);
+        end(false);
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.stopIntakeMotor();
     }
 
     @Override

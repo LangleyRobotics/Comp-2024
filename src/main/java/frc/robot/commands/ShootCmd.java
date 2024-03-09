@@ -24,9 +24,10 @@ public class ShootCmd extends Command {
   public void initialize() {
    if(finished) {
       shooterSubsystem.setShooterMotor(0.0);
+      end(false);
     } else {
       shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
-
+      end(false);
     
   }
 }
@@ -35,11 +36,10 @@ public class ShootCmd extends Command {
     
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.stopShooterMotor();
   }
 
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

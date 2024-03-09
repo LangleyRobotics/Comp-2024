@@ -46,16 +46,19 @@ import frc.robot.commands.OTFTrajectoryFactory;
 import frc.robot.commands.SwerveControllerCmd;
 import frc.robot.commands.ShooterControllerCmd;
 import frc.robot.commands.PivotControllerCmd;
+import frc.robot.commands.AutoClimbControllerCmd;
 import frc.robot.commands.ClimbControllerCmd;
+import frc.robot.commands.ClimbSwitchDirCmd;
 import frc.robot.commands.SetPivotCmd;
 import frc.robot.commands.AutoAlignShootCmd;
+import frc.robot.commands.IntakeCmd;
 
 //Subsystem Imports
 import frc.robot.subsystems.*;
 
 //Auto Commands
 import frc.robot.commands.ShootCmd;
-import frc.robot.commands.IntakeCmd;
+import frc.robot.commands.IntakeAutoCmd;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -123,7 +126,7 @@ public class RobotContainer {
         () -> operatorController.getLeftBumper()));
 
     intakeSubsystem.setDefaultCommand(
-      new IntakeCmd(
+      new IntakeAutoCmd(
         intakeSubsystem, 
         () -> 0.0, 
         0));
@@ -159,17 +162,21 @@ public class RobotContainer {
       new SetPivotCmd(pivotSubsystem, 1),
       new WaitCommand(2.5));
 
-    Command intake = new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
+    Command intake = new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
     
     SequentialCommandGroup shoot = new SequentialCommandGroup(
-      new ShootCmd(shooterSubsystem,false),
-      new WaitCommand(2),
-      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1),
-      new WaitCommand(2),
-      new IntakeCmd(intakeSubsystem, () -> 0.0, 1),
-      new ShootCmd(shooterSubsystem, true));
+      new ParallelCommandGroup(
+        new ShootCmd(shooterSubsystem,false),
+        new SequentialCommandGroup(
+          new WaitCommand(2),
+          new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1))),
+        new WaitCommand(2),
+        new ParallelCommandGroup(
+          new IntakeAutoCmd(intakeSubsystem, () -> 0.0, 1),
+          new ShootCmd(shooterSubsystem, true)));
 
- 
+
+      AutoClimbControllerCmd leftTelescopeDown = new AutoClimbControllerCmd(climbSubsystem, () -> true, false, "left");
 
 
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
@@ -184,7 +191,13 @@ public class RobotContainer {
 
     SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
     SequentialCommandGroup backAutoRedLeft = robotDrive.AutoCommandFactory(Trajectories.backAutoRedLeft);
-    SequentialCommandGroup oneNote =new SequentialCommandGroup(pivotToIntake,shoot,goStraight);
+    SequentialCommandGroup oneNote = new SequentialCommandGroup(
+      new ParallelCommandGroup(
+        leftTelescopeDown,
+        new SequentialCommandGroup(new WaitCommand(0.3), pivotToIntake)), 
+      shoot, 
+      goStraight);
+
 
     autoChooser = AutoBuilder.buildAutoChooser();
     autoChooser.addOption("Go Straight", goStraight);
@@ -201,7 +214,7 @@ public class RobotContainer {
 
 
 
-    SmartDashboard.putBoolean("April Tag Dist Zero???", limelightSubsystem.getDistanceToTarget() < 0.5);
+    
   }
 
   /**
@@ -272,6 +285,13 @@ public class RobotContainer {
 
     //Climb collapse both
     new JoystickButton(driverController, Buttons.LB).whileTrue(new ClimbControllerCmd(climbSubsystem, () -> true, false, "both"));
+
+    //Climb switch right direction
+    new JoystickButton(driverController, Buttons.Menu).whileTrue( new ClimbSwitchDirCmd(climbSubsystem,'r'));
+
+    //Climb switch left direction
+    new JoystickButton(driverController, Buttons.Maria).whileTrue(new ClimbSwitchDirCmd(climbSubsystem, 'l'));
+
 
 
     //Intake and shoot

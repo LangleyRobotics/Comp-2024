@@ -11,8 +11,11 @@ public class ClimbSubsystem extends SubsystemBase {
     private final CANSparkMax climbMotorRight = new CANSparkMax(ClimbConstants.kClimbMotorRight, MotorType.kBrushless);
     private final CANSparkMax climbMotorLeft = new CANSparkMax(ClimbConstants.kClimbMotorLeft, MotorType.kBrushless);
     
-    private final DigitalInput rightLimitSwitch = new DigitalInput(3);
-    private final DigitalInput leftLimitSwitch = new DigitalInput(2);
+    private final DigitalInput rightLimitSwitch = new DigitalInput(2);
+    private final DigitalInput leftLimitSwitch = new DigitalInput(3);
+
+    private int rightDir = 1;
+    private int leftDir = 1;
 
     public ClimbSubsystem() {}
 
@@ -24,25 +27,39 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setRightClimbMotor(double velocity){
-        // if(!rightLimitSwitch.get()&&velocity<0) {
-        //     climbMotorRight.set(0);
-        //     climbMotorRight.getEncoder().setPosition(0);
-        // // } else if(velocity > 0 && climbMotorRight.getEncoder().getPosition() >= ClimbConstants.encoderUpperLimit) {
-        // //     climbMotorRight.set(0);
-        // } else {
-            climbMotorRight.set(velocity);
-        //}
+        double vel = velocity * rightDir;
+        if(!rightLimitSwitch.get() && vel < 0) {
+            climbMotorRight.set(0);
+            climbMotorRight.getEncoder().setPosition(0);
+        } else if(vel > 0 && climbMotorRight.getEncoder().getPosition() >= ClimbConstants.encoderUpperLimit) {
+            climbMotorRight.set(0);
+        } else {
+            climbMotorRight.set(vel);
+        }
     }
 
     public void setLeftClimbMotor(double velocity){
-        // if(!leftLimitSwitch.get()&&velocity<0) {
-        //     climbMotorLeft.set(0);
-        //     climbMotorLeft.getEncoder().setPosition(0);
-        // // } else if(velocity > 0 && climbMotorLeft.getEncoder().getPosition() > ClimbConstants.encoderUpperLimit) {
-        // //     climbMotorRight.set(0);
-        // } else {
-            climbMotorLeft.set(velocity);
-        //}
+        double vel = velocity * leftDir;
+        if(!leftLimitSwitch.get() && vel < 0) {
+            climbMotorLeft.set(0);
+            climbMotorLeft.getEncoder().setPosition(0);
+        } else if(vel > 0 && climbMotorLeft.getEncoder().getPosition() > ClimbConstants.encoderUpperLimit) {
+            climbMotorRight.set(0);
+        } else {
+            climbMotorLeft.set(vel);
+        }
+    }
+
+    public boolean getleftLimitSwitch(){
+        return !leftLimitSwitch.get();
+    }
+
+    public void switchDir(char c) {
+        if(c == 'r') {
+            rightDir *= -1;
+        } else if (c == 'l') {
+            leftDir *= -1;
+        }
     }
 
     public void stopClimbMotor(){
