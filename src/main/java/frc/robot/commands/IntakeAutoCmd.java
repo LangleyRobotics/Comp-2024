@@ -31,7 +31,7 @@ public class IntakeAutoCmd extends Command{
         double velocity = speed*dir;
 
         intakeSubsystem.setIntakeMotor(velocity);
-        end(false);
+
     }
 
     @Override

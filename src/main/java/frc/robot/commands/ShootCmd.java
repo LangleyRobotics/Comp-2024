@@ -22,18 +22,28 @@ public class ShootCmd extends Command {
 
   @Override
   public void initialize() {
-   if(finished) {
+    if(finished) {
       shooterSubsystem.setShooterMotor(0.0);
-      end(false);
+
     } else {
       shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
-      end(false);
-    
+      
   }
-}
+  }
+   
   @Override
-  public void execute() {}
-    
+  public void execute() {
+    if(finished) {
+      shooterSubsystem.setShooterMotor(0.0);
+      end(true);
+
+    } else {
+      shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
+      end(true);
+      
+  }
+  }
+  
   @Override
   public void end(boolean interrupted) {
   }
@@ -43,3 +53,4 @@ public class ShootCmd extends Command {
     return false;
   }
 }
+

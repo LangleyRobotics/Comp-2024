@@ -19,17 +19,17 @@ public class ShooterLookupTable {
         // TODO - may be percentage instead of RPM, check smartdashboard.
         // TABLE FORMAT: DISTANCE, SHOOTER RPM, PIVOT ANGLE (DEG) //
         double[][] lookupTable = {
-                {1.65, 1, 180},
-                {1.88, 1, 174},
-                {2.05, 1, 166},
-                {2.19, 1, 165},
-                {2.39, 1, 164},
-                {2.51, 1, 163},
-                {3, 1, 155.35},
-                {3.32, 1, 149.39},
-                {3.68, 1, 149.2},
-                {3.91, 1, 149.0},
-                {4.22, 1, 148.0}
+                {1.65, 1, 178},
+                {1.88, 1, 173},
+                {2.05, 1, 165},
+                {2.14, 1, 157},
+                {2.45, 1, 153},
+                {2.51, 1, 152},
+                {3, 1, 147},
+                {3.32, 1, 146.39},
+                {3.68, 1, 145.2},
+                {3.91, 1, 145.0},
+                {4.22, 1, 144.0}
         };
         createLookupTable(lookupTable);
     }

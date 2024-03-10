@@ -83,6 +83,11 @@ public class PivotSubsystem extends SubsystemBase {
         return pivotAbsEncoder.getDistance() - offset;
     }
 
+    //reset the pivot encoder to the be 0-180 at illegal position
+    public void resetPivotEncoder() {
+        offset = pivotAbsEncoder.getDistance() - PivotConstants.kPivotOffset + 183;
+    }
+
     //Send arm to a specific setpoint
     public void goToSetpoint(double desPosition) {
         //desPosition = radians

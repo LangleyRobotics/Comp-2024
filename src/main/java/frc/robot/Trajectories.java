@@ -199,7 +199,7 @@ public class Trajectories {
         TrajectoryGenerator.generateTrajectory(
             new Pose2d(AutoConstants.kFieldEndXCoordinate - 1.7, 4.45, new Rotation2d(0)), 
             List.of(), 
-            new Pose2d(AutoConstants.kFieldEndXCoordinate - 5.7,4.45, new Rotation2d(0)), 
+            new Pose2d(AutoConstants.kFieldEndXCoordinate - 5.7, 4.45, new Rotation2d(0)), 
             reverseConfig);
     
     public static final Trajectory backAutoBlueLeft = 
@@ -253,8 +253,8 @@ public class Trajectories {
     //Go Straight
     public static final Trajectory goStraight =
     TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(2.2, 0.1)),
-        new Pose2d(2.2, 0, new Rotation2d(0)),
+        new Pose2d(0, 5, new Rotation2d(0)),
+        List.of(),
+        new Pose2d(15.2, 6, new Rotation2d(0)),
         config);
 }

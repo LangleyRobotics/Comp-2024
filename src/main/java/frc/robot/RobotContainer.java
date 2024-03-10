@@ -46,6 +46,8 @@ import frc.robot.commands.OTFTrajectoryFactory;
 import frc.robot.commands.SwerveControllerCmd;
 import frc.robot.commands.ShooterControllerCmd;
 import frc.robot.commands.PivotControllerCmd;
+import frc.robot.commands.ResetPivotCmd;
+import frc.robot.commands.SetPivotAuto;
 import frc.robot.commands.AutoClimbControllerCmd;
 import frc.robot.commands.ClimbControllerCmd;
 import frc.robot.commands.ClimbSwitchDirCmd;
@@ -68,6 +70,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 //import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -123,7 +126,8 @@ public class RobotContainer {
       new ShooterControllerCmd(
         shooterSubsystem,
         () -> operatorController.getRightBumper(),
-        () -> operatorController.getLeftBumper()));
+        () -> operatorController.getLeftBumper(),
+        () -> false));
 
     intakeSubsystem.setDefaultCommand(
       new IntakeAutoCmd(
@@ -160,20 +164,20 @@ public class RobotContainer {
 
     ParallelCommandGroup pivotToShootUpClose = new ParallelCommandGroup (
       new SetPivotCmd(pivotSubsystem, 1),
-      new WaitCommand(2.5));
+      new WaitCommand(1.5));
 
     Command intake = new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
     
     SequentialCommandGroup shoot = new SequentialCommandGroup(
       new ParallelCommandGroup(
-        new ShootCmd(shooterSubsystem,false),
+        new InstantCommand(() -> new ShootCmd(shooterSubsystem,false)),
         new SequentialCommandGroup(
           new WaitCommand(2),
-          new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1))),
+          new InstantCommand(()->new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)))),
         new WaitCommand(2),
         new ParallelCommandGroup(
-          new IntakeAutoCmd(intakeSubsystem, () -> 0.0, 1),
-          new ShootCmd(shooterSubsystem, true)));
+          new InstantCommand(()->new IntakeAutoCmd(intakeSubsystem, () -> 0.0, 1)),
+          new InstantCommand(()->new ShootCmd(shooterSubsystem, true))));
 
 
       AutoClimbControllerCmd leftTelescopeDown = new AutoClimbControllerCmd(climbSubsystem, () -> true, false, "left");
@@ -191,12 +195,7 @@ public class RobotContainer {
 
     SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
     SequentialCommandGroup backAutoRedLeft = robotDrive.AutoCommandFactory(Trajectories.backAutoRedLeft);
-    SequentialCommandGroup oneNote = new SequentialCommandGroup(
-      new ParallelCommandGroup(
-        leftTelescopeDown,
-        new SequentialCommandGroup(new WaitCommand(0.3), pivotToIntake)), 
-      shoot, 
-      goStraight);
+    ParallelCommandGroup oneNote = new ParallelCommandGroup(new SetPivotCmd(pivotSubsystem, 1),new SequentialCommandGroup(new WaitCommand(4),new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)),new SequentialCommandGroup(new WaitCommand(2),new ShootCmd(shooterSubsystem,false)),new SequentialCommandGroup(new WaitCommand(5),goStraight));
 
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -245,11 +244,15 @@ public class RobotContainer {
 
     //Shoot in ring
     new JoystickButton(operatorController, Buttons.LB).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
-    () -> true, () -> false));
+    () -> true, () -> false, () -> false));
 
     //Shoot out ring
     new JoystickButton(operatorController, Buttons.RB).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
-    () -> false, () -> true));
+    () -> false, () -> true, () -> false));
+
+    //Shoot out extra torque
+    new JoystickButton(operatorController, Buttons.Y).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
+    () -> false, () -> false, () -> true));
 
 
 
@@ -294,22 +297,9 @@ public class RobotContainer {
 
 
 
-    //Intake and shoot
-    new JoystickButton(operatorController, Buttons.Maria).whileTrue(new ParallelCommandGroup(
-      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1), 
-      new ShooterControllerCmd(
-        shooterSubsystem,
-        () -> false,
-        () -> true)));
-
-    //Outake and outshoot
-    new JoystickButton(operatorController, Buttons.Menu).whileTrue(new ParallelCommandGroup(
-      new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, -1), 
-      new ShooterControllerCmd(
-        shooterSubsystem,
-        () -> true,
-        () -> false)));
-
+    
+    //Reset pivot encoder at illegal position
+    new JoystickButton(operatorController, Buttons.Maria).whileTrue(new ResetPivotCmd(pivotSubsystem));
 
 
 

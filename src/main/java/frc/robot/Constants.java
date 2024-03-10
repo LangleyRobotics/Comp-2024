@@ -196,7 +196,7 @@ public final class Constants {
     public static final double kMaxPivotPosition = 180;
     public static final double kMinPivotPosition = 75;
     public static final double kAmpPosition = 90;
-    public static final double shootUpClosePosition = 140; //position of pivot encoder for shooting when up against the speaker
+    public static final double shootUpClosePosition = 160; //position of pivot encoder for shooting when up against the speaker
     public static final double shootSideRingsPosition = 170;
 
     public static final double kPivotOffset = 181;
@@ -221,7 +221,7 @@ public final class Constants {
     //TEST Simple goToSetpoint() method constants
     public static final double tinyPivotSpeed = 0.7;
     public static final double tinyPivotAccel = 0.05;
-    public static final double deadbandAngle = 1;
+    public static final double deadbandAngle = 3;
 
     public static final double pivotSetpointFactor = 1;
   }
