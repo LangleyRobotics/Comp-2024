@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CameraConstants;
 import frc.robot.Constants.PivotConstants;
-import frc.robot.subsystems.CameraSubsystem;
 
 public class MathMethods {
     public static final double Tau = 2*Math.PI;
@@ -60,21 +59,6 @@ public class MathMethods {
     public static Pose2d poseXFlipper(Pose2d pose) {
         double rot = pose.getRotation().getRadians();
         return new Pose2d(AutoConstants.kFieldEndXCoordinate - pose.getX(), pose.getY(), new Rotation2d(signDouble(rot) * (Math.PI - Math.abs(rot))));
-    }
-
-    //TEST Calculate the setpoint needed to auto align the shooter with the goal
-    //Returns the angle in radians
-    public static double calculateSetpoint(CameraSubsystem cameraSubsystem) {
-        double h1 = CameraConstants.h1;
-        double h2 = CameraConstants.h2;
-        double L = CameraConstants.L;
-        double tempTheta = CameraConstants.tempTheta;
-        double length1 = cameraSubsystem.getDistanceToAprilTag() * Math.cos(cameraSubsystem.getPitch());
-        double length2 = length1 + CameraConstants.deltaX + L * Math.cos(tempTheta);
-        double constant = (h1 + h2 - L * Math.sin(tempTheta)) / (length2);
-
-        //Only works if the angle between shooter arm and shooter (alpha) = 45 degrees
-        return Math.atan((1 - constant) / (1 + constant)) * PivotConstants.pivotSetpointFactor;
     }
     
 }

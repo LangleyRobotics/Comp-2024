@@ -157,10 +157,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void setPose(Pose2d aprilPose2d) {
     m_odometry.resetPosition(m_gyro.getRotation2d(),         
       new SwerveModulePosition[] {
-        frontLeft.getPosition(),
         frontRight.getPosition(),
-        rearLeft.getPosition(),
-        rearRight.getPosition()
+        frontLeft.getPosition(),
+        rearRight.getPosition(),
+        rearLeft.getPosition()
       }, aprilPose2d);
   }
 

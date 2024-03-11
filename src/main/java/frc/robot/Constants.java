@@ -55,7 +55,7 @@ public final class Constants {
     public static final boolean kFrontLeftTurningMotorReversed = true;
 
     public static final boolean kFrontRightDriveMotorReversed = true;
-    public static final boolean kRearRightDriveMotorReversed = true;
+    public static final boolean kRearRightDriveMotorReversed = false;
     public static final boolean kRearLeftDriveMotorReversed = true;
     public static final boolean kFrontLeftDriveMotorReversed = true;
 
@@ -73,7 +73,7 @@ public final class Constants {
 
     //Fix Front and rear left offsets (radians)
     public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//0.04418;//174
-    public static final double kRearRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//0.4504;//5
+    public static final double kRearRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(180);//0.4504;//5
     public static final double kRearLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//0.1489;//-10
     public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(0);//0.1992;//-4
 
@@ -88,10 +88,10 @@ public final class Constants {
 
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
-            new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //+- = Front Right  ++
-            new Translation2d(kWheelBase / 2, kTrackWidth / 2), //++ = Front Left  -+
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), //-- = Rear Right  +-
-            new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); //-+ = Rear Left --
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //+- = Front Right 
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2), //++ = Front Left 
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2), //-- = Rear Right 
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2)); //-+ = Rear Left
 
 
     public static final boolean kGyroReversed = false;
@@ -196,7 +196,7 @@ public final class Constants {
     public static final double kMaxPivotPosition = 180;
     public static final double kMinPivotPosition = 75;
     public static final double kAmpPosition = 90;
-    public static final double shootUpClosePosition = 160; //position of pivot encoder for shooting when up against the speaker
+    public static final double shootUpClosePosition = 170; //position of pivot encoder for shooting when up against the speaker
     public static final double shootSideRingsPosition = 170;
 
     public static final double kPivotOffset = 181;

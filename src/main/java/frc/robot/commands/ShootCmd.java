@@ -11,46 +11,35 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootCmd extends Command {
   private final ShooterSubsystem shooterSubsystem;
-  private final boolean finished;
+  private final double speed;
+  private double holder;
 
-  public ShootCmd(ShooterSubsystem shooterSubsystem, boolean finished) {
+  public ShootCmd(ShooterSubsystem shooterSubsystem, double speed) {
     this.shooterSubsystem = shooterSubsystem;
-    this.finished = finished;
+    this.speed = speed;
 
     addRequirements(shooterSubsystem);
   }
 
   @Override
   public void initialize() {
-    if(finished) {
-      shooterSubsystem.setShooterMotor(0.0);
-
-    } else {
-      shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
-      
-  }
+    shooterSubsystem.setShooterMotor(-speed);
+    //holder = System.currentTimeMillis();
   }
    
   @Override
   public void execute() {
-    if(finished) {
-      shooterSubsystem.setShooterMotor(0.0);
-      end(true);
-
-    } else {
-      shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
-      end(true);
-      
-  }
   }
   
   @Override
   public void end(boolean interrupted) {
+    //shooterSubsystem.stopShooterMotor();
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    //return System.currentTimeMillis() - holder > 2500;
+    return true;
   }
 }
 

@@ -131,7 +131,7 @@ public class RobotContainer {
         () -> false));
 
     intakeSubsystem.setDefaultCommand(
-      new IntakeAutoCmd(
+      new IntakeCmd(
         intakeSubsystem, 
         () -> 0.0, 
         0));
@@ -159,31 +159,20 @@ public class RobotContainer {
     // Register Named Commands
     //Named commands = commands other than driving around that still need to be executed in auto
 
-    ParallelCommandGroup pivotToIntake = new ParallelCommandGroup(
-      new SetPivotCmd(pivotSubsystem, 0),
-      new WaitCommand(1.5));
-
-    ParallelCommandGroup pivotToShootUpClose = new ParallelCommandGroup (
-      new SetPivotCmd(pivotSubsystem, 1),
-      new WaitCommand(1.5));
-
-    Command intake = new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1);
-    
-    SequentialCommandGroup shoot = new SequentialCommandGroup(
-      new ParallelCommandGroup(
-        new InstantCommand(() -> new ShootCmd(shooterSubsystem,false)),
-        new SequentialCommandGroup(
-          new WaitCommand(2),
-          new InstantCommand(()->new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)))),
-        new WaitCommand(2),
-        new ParallelCommandGroup(
-          new InstantCommand(()->new IntakeAutoCmd(intakeSubsystem, () -> 0.0, 1)),
-          new InstantCommand(()->new ShootCmd(shooterSubsystem, true))));
+    var pivotToIntake = new SetPivotCmd(pivotSubsystem, 0).withTimeout(1.5);
+    var pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1).withTimeout(5);
+    var intake = new IntakeAutoCmd(intakeSubsystem, IntakeConstants.kIntakeMotorSpeed, 1);
+    var leftTelescopeDown = new AutoClimbControllerCmd(climbSubsystem, () -> true, false, "left");
 
 
-      AutoClimbControllerCmd leftTelescopeDown = new AutoClimbControllerCmd(climbSubsystem, () -> true, false, "left");
+    ParallelCommandGroup shoot = new ParallelCommandGroup(
+      new ShootCmd(shooterSubsystem, ShooterConstants.kShooterMotorSpeed).withTimeout(1.5),
+      new SequentialCommandGroup(
+        new WaitCommand(1),
+        new IntakeAutoCmd(intakeSubsystem, IntakeConstants.kIntakeMotorSpeed, 1).withTimeout(0.4)));
 
 
+    //Named Commands for PathPlanner
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
     NamedCommands.registerCommand("Pivot To Shoot Up Close", pivotToShootUpClose);
     NamedCommands.registerCommand("Shoot", shoot);
@@ -193,68 +182,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-
-    // SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
-    SwerveControllerCmd goStraight = new SwerveControllerCmd(
-            robotDrive,
-            () -> 0.4,
-            () -> 0.0,
-            () -> 0.0,
-            () -> true, // field oriented
-            () -> false);
-
-    SequentialCommandGroup backAutoRedLeft = robotDrive.AutoCommandFactory(Trajectories.backAutoRedLeft);
-    SequentialCommandGroup oneNoteDrive = new SequentialCommandGroup( 
-      new WaitCommand(11),
-      new ParallelCommandGroup(
-        new ClimbAutoCmd(climbSubsystem, () -> true, false, "left"),
-        new SetPivotCmd(pivotSubsystem, 1),
-        new SequentialCommandGroup(
-          new WaitCommand(0.7), new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)),
-        new SequentialCommandGroup(
-          new WaitCommand(0),
-          new ShootCmd(shooterSubsystem,false))),
-      new SequentialCommandGroup(
-        new WaitCommand(1.5), 
-        goStraight));
-
-      SequentialCommandGroup oneNote = new SequentialCommandGroup(
-      new WaitCommand(11),
-      new ParallelCommandGroup(
-        new ClimbAutoCmd(climbSubsystem, () -> true, false, "left"),
-        new SetPivotCmd(pivotSubsystem, 1),
-        new SequentialCommandGroup(
-          new WaitCommand(0.7), new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)),
-        new SequentialCommandGroup(
-          new WaitCommand(0),
-          new ShootCmd(shooterSubsystem,false))));
-      //new SequentialCommandGroup(
-      //new WaitCommand(3.5), 
-      //new ShootCmd(shooterSubsystem,true))
-      //     new SequentialCommandGroup(
-      //       new WaitCommand(4), 
-      //       new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)));
-
-
-
-
     autoChooser = AutoBuilder.buildAutoChooser();
-    autoChooser.addOption("Go Straight", goStraight);
-    autoChooser.addOption("TEST Forward Auto Red Left", backAutoRedLeft);
-    autoChooser.addOption("One Note Drive Auto", oneNoteDrive);
-    autoChooser.addOption("One Note Auto", oneNote);
-    
-
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-    //**Load in paths from Trajectories as drive commands using the AutoCommandFactory**
-
-
-
-
-
-    
   }
 
   /**

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.CameraSubsystem;
 
 
 
@@ -20,12 +19,10 @@ public class Robot extends TimedRobot {
   private Command lightsCommand;
 
   private RobotContainer m_robotContainer;
-  private CameraSubsystem m_cameraSubsystem;
 
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    // m_cameraSubsystem = new CameraSubsystem();
   }
 
   @Override

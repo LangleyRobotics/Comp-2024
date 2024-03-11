@@ -119,7 +119,7 @@ public class PivotSubsystem extends SubsystemBase {
     //TEST Feedforward and PID controller for pivot
     public void pivotWithPID(double desPosition) {
         //desPosition = radians
-        double output = pivotPIDController.calculate    (getPivotAbsEncoder(), desPosition);
+        double output = pivotPIDController.calculate(getPivotAbsEncoder(), desPosition);
         // System.out.println(pivotMotorLeft.get());
         if(output > 0 && desPosition >= 160) {
             pivotMotorRight.setVoltage(-0.03);

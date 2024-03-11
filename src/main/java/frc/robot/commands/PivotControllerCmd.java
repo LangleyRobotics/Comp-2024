@@ -11,7 +11,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.MathMethods;
 import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.MoveToSetPointCmd;
 import frc.robot.subsystems.GoodPivot;
 /*
@@ -25,26 +24,23 @@ import frc.robot.subsystems.GoodPivot;
 public class PivotControllerCmd extends Command{
 
   private final PivotSubsystem pivotSubsystem;
-  private final CameraSubsystem cameraSubsystem;
   private final Supplier<Double> pivotPositiveDirFunction;
   private final Supplier<Double> pivotNegativeDirFunction;
 
   public PivotControllerCmd(PivotSubsystem pivotSubsystem, Supplier<Double> pivotPositiveDirFunction, Supplier<Double> pivotNegativeDirFunction) {
     this.pivotSubsystem = pivotSubsystem;
-    this.cameraSubsystem = null;
     this.pivotPositiveDirFunction = pivotPositiveDirFunction;
     this.pivotNegativeDirFunction = pivotNegativeDirFunction;
 
     addRequirements(pivotSubsystem);
   }
 
-  public PivotControllerCmd(PivotSubsystem pivotSubsystem, CameraSubsystem cameraSubsystem) {
+  public PivotControllerCmd(PivotSubsystem pivotSubsystem) {
     this.pivotSubsystem = pivotSubsystem;
-    this.cameraSubsystem = cameraSubsystem;
     this.pivotPositiveDirFunction = () -> 0.0;
     this.pivotNegativeDirFunction = () -> 0.0;
 
-    addRequirements(pivotSubsystem, cameraSubsystem);
+    addRequirements(pivotSubsystem);
   }
 
   @Override
@@ -56,53 +52,21 @@ public class PivotControllerCmd extends Command{
   @Override
   public void execute() {
 
-    //If setting pivot to a setpoint
-    if(cameraSubsystem != null) {
-      pivotSubsystem.goToSetpoint(MathMethods.calculateSetpoint(cameraSubsystem));
-      //pivotSubsystem.pivotWithFeedforwardPID(double desPosition, double desVelocity, double desAccel);
-    } else {
-      
-      //Establish button inputs
-      // double positiveSpeed = pivotPositiveDirFunction.get();
-      // double negativeSpeed = pivotNegativeDirFunction.get();
-
-      // double velocity = positiveSpeed - negativeSpeed;
-
-      //pivotSubsystem.setPivotMotor(velocity);
-
-
-
-      //**Pivot toward intake position**
-      if(pivotPositiveDirFunction.get() > 0) {
-        pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder() - 5);
-        // if(pivotSubsystem.getPivotAbsEncoder() > 90) {
-        //   pivotSubsystem.setPivotMotorNoBounds(0.3);
-        // } else if(pivotSubsystem.getPivotAbsEncoder() < 45) {
-        //     pivotSubsystem.setPivotMotorNoBounds(0.05);
-        // } else {
-        //   pivotSubsystem.setPivotMotorNoBounds(0.15);
-        // }
-      } 
-      
-      
-      //**Pivot toward amp position**
-      else if(pivotNegativeDirFunction.get() > 0) {
-        pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder() + 5);
-        // if(pivotSubsystem.getPivotAbsEncoder() < 90) {
-        //   pivotSubsystem.setPivotMotorNoBounds(-0.3);
-        // } else if(pivotSubsystem.getPivotAbsEncoder() > 115) {
-        //     pivotSubsystem.setPivotMotorNoBounds(0);
-        // } else {
-        //   pivotSubsystem.setPivotMotorNoBounds(-0.15);
-        // }
-      }
-      
-      
-      //**Keep arm in place when no controller input**
-      else {
-        //pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder());
-        pivotSubsystem.setPivotMotorNoBounds(MathMethods.signDouble(Math.cos(pivotSubsystem.getPivotAbsEncoder()))*0.02 - PivotConstants.pivotCompensation * Math.cos(Math.toRadians(pivotSubsystem.getPivotAbsEncoder())));
-      }
+    //**Pivot toward intake position**
+    if(pivotPositiveDirFunction.get() > 0) {
+      pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder() - 5);
+    } 
+    
+    
+    //**Pivot toward amp position**
+    else if(pivotNegativeDirFunction.get() > 0) {
+      pivotSubsystem.pivotWithPID(pivotSubsystem.getPivotAbsEncoder() + 5);
+    }
+    
+    
+    //**Keep arm in place when no controller input**
+    else {
+      pivotSubsystem.setPivotMotorNoBounds(MathMethods.signDouble(Math.cos(pivotSubsystem.getPivotAbsEncoder()))*0.02 - PivotConstants.pivotCompensation * Math.cos(Math.toRadians(pivotSubsystem.getPivotAbsEncoder())));
     }
 
   }
