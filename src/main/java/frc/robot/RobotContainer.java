@@ -49,6 +49,7 @@ import frc.robot.commands.PivotControllerCmd;
 import frc.robot.commands.ResetPivotCmd;
 import frc.robot.commands.SetPivotAuto;
 import frc.robot.commands.AutoClimbControllerCmd;
+import frc.robot.commands.ClimbAutoCmd;
 import frc.robot.commands.ClimbControllerCmd;
 import frc.robot.commands.ClimbSwitchDirCmd;
 import frc.robot.commands.SetPivotCmd;
@@ -193,14 +194,54 @@ public class RobotContainer {
     configureButtonBindings();
 
 
-    SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
+    // SequentialCommandGroup goStraight = robotDrive.AutoCommandFactory(Trajectories.goStraight);
+    SwerveControllerCmd goStraight = new SwerveControllerCmd(
+            robotDrive,
+            () -> 0.4,
+            () -> 0.0,
+            () -> 0.0,
+            () -> true, // field oriented
+            () -> false);
+
     SequentialCommandGroup backAutoRedLeft = robotDrive.AutoCommandFactory(Trajectories.backAutoRedLeft);
-    ParallelCommandGroup oneNote = new ParallelCommandGroup(new SetPivotCmd(pivotSubsystem, 1),new SequentialCommandGroup(new WaitCommand(4),new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)),new SequentialCommandGroup(new WaitCommand(2),new ShootCmd(shooterSubsystem,false)),new SequentialCommandGroup(new WaitCommand(5),goStraight));
+    SequentialCommandGroup oneNoteDrive = new SequentialCommandGroup( 
+      new WaitCommand(11),
+      new ParallelCommandGroup(
+        new ClimbAutoCmd(climbSubsystem, () -> true, false, "left"),
+        new SetPivotCmd(pivotSubsystem, 1),
+        new SequentialCommandGroup(
+          new WaitCommand(0.7), new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)),
+        new SequentialCommandGroup(
+          new WaitCommand(0),
+          new ShootCmd(shooterSubsystem,false))),
+      new SequentialCommandGroup(
+        new WaitCommand(1.5), 
+        goStraight));
+
+      SequentialCommandGroup oneNote = new SequentialCommandGroup(
+      new WaitCommand(11),
+      new ParallelCommandGroup(
+        new ClimbAutoCmd(climbSubsystem, () -> true, false, "left"),
+        new SetPivotCmd(pivotSubsystem, 1),
+        new SequentialCommandGroup(
+          new WaitCommand(0.7), new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)),
+        new SequentialCommandGroup(
+          new WaitCommand(0),
+          new ShootCmd(shooterSubsystem,false))));
+      //new SequentialCommandGroup(
+      //new WaitCommand(3.5), 
+      //new ShootCmd(shooterSubsystem,true))
+      //     new SequentialCommandGroup(
+      //       new WaitCommand(4), 
+      //       new IntakeAutoCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, 1)));
+
+
 
 
     autoChooser = AutoBuilder.buildAutoChooser();
     autoChooser.addOption("Go Straight", goStraight);
     autoChooser.addOption("TEST Forward Auto Red Left", backAutoRedLeft);
+    autoChooser.addOption("One Note Drive Auto", oneNoteDrive);
     autoChooser.addOption("One Note Auto", oneNote);
     
 
