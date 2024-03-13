@@ -25,13 +25,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterMotor(double percentage) {
+    shooterMotor.set(percentage);
   
-    try {
-      shooterMotor.set(percentage);
+    // try {
+    //   shooterMotor.set(percentage);
 
-    } catch(Exception e) {
-        System.out.println("Error: Shooter Motor exception:" + e.toString());
-    }
+    // } catch(Exception e) {
+    //     System.out.println("Error: Shooter Motor exception:" + e.toString());
+    // }
   }
 
   public void stopShooterMotor() {

@@ -55,7 +55,6 @@ public class LimelightSubsystem extends SubsystemBase{
 //        boolean targetInView = targetInView();
         SmartDashboard.putNumber("AprilTag Distance", getDistanceToTarget());
         SmartDashboard.putNumber("AprilTag Mean Distance", mean());
-        SmartDashboard.putBoolean("April Tag Dist Zero???",getDistanceToTarget() < 0.5);
         double temp = getDistanceToTarget();
         if(temp!=0){
           if(System.currentTimeMillis()%1000<100){

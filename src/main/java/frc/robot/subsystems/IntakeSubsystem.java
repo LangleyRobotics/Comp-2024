@@ -7,24 +7,24 @@ import frc.robot.Constants.IntakeConstants;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.nio.ByteBuffer;
-import edu.wpi.first.wpilibj.I2C;
 
 
 public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotor, MotorType.kBrushless);
-    private final DigitalInput colorSensor = new DigitalInput(1);
+    private final DigitalInput intakeLimit = new DigitalInput(1); //limit switch
 
-
-    //private I2C sensor = new I2C(null, 0);
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Sense color?", colorSensor.get());
+        SmartDashboard.putBoolean("Note in?", intakeLimit.get());
     }
 
     public void setIntakeMotor(double velocity){
-        if(!colorSensor.get()) {
+        intakeMotor.set(velocity);
+    }
+
+    public void setIntakeMotorLimited(double velocity, double dir){
+        if(intakeLimit.get() && dir == -1) {
             intakeMotor.set(0);
         } else {
             intakeMotor.set(velocity);
@@ -35,8 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.set(0);
     }
 
-    public boolean getColorSensor() {
-        return colorSensor.get();
+    public boolean getIntakeLimit() {
+        return intakeLimit.get();
     }
-
 }

@@ -1,0 +1,81 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6582127857550991,
+      "y": 6.698598504187022
+    },
+    "rotation": 61.33604288971849
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Left Telescope Down"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Shoot Up Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Straight Path (Amp)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Ground Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot To Align And Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Two Note",
+  "choreoAuto": false
+}

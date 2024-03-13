@@ -12,45 +12,39 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Pivot To Shoot Up Close"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Pivot To Intake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "Left Telescope Down"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Straight Path"
+                  "name": "Pivot To Shoot Up Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight Path (Top)"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "One Note",
   "choreoAuto": false
 }

@@ -1,0 +1,50 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6582127857550991,
+      "y": 6.698598504187022
+    },
+    "rotation": 59.34933204294712
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Left Telescope Down"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Shoot Up Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight Path (Amp)"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "One Note",
+  "choreoAuto": false
+}

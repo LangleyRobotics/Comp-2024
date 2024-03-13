@@ -231,7 +231,17 @@ public final class Constants {
     public static final int kClimbMotorLeft = 14;
     public static final double kClimbMotorSpeed = 0.6; //value from 0-1
 
-    public static final double encoderUpperLimit = 1000;
+    //through bore encoder values
+    public static final double rightUpperLimit = 1000;
+    public static final double rightLowerLimit = 0;
+
+    public static final double leftUpperLimit = 1000;
+    public static final double leftLowerLimit = 0;
+
+    public static final double rightOffset = 0;
+    public static final double leftOffset = 0;
+
+    public static final double disPerRot = 1;
   }
   
   public static final class CameraConstants {

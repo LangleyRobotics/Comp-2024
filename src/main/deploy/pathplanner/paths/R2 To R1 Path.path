@@ -8,24 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8410072768790318,
-        "y": 5.738309907432939
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.5950797094176201,
-        "y": 6.499514282908736
-      },
-      "prevControl": {
-        "x": 1.6067905459634013,
-        "y": 6.417538427088266
-      },
-      "nextControl": {
-        "x": 1.583486572708775,
-        "y": 6.580666239870653
+        "x": 1.7087395713252982,
+        "y": 5.949766514917646
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +20,8 @@
         "y": 6.991369417831561
       },
       "prevControl": {
-        "x": 1.4700000000000002,
-        "y": 6.991369417831561
+        "x": 1.5311346007307416,
+        "y": 7.163400480647115
       },
       "nextControl": null,
       "isLocked": false,
@@ -83,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Rings Paths",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

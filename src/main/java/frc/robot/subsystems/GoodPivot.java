@@ -50,8 +50,6 @@ public class GoodPivot extends ProfiledPIDSubsystem {
     super.periodic();
     SmartDashboard.putNumber("Pivot Encoder", getPivotAbsEncoder());
     SmartDashboard.putBoolean("Pivot Encoder Connected?", pivotAbsEncoder.isConnected());
-    SmartDashboard.putNumber("Pivot Right Voltage", pivotMotorRight.getBusVoltage());
-    SmartDashboard.putNumber("Pivot Left Voltage", pivotMotorLeft.getBusVoltage());
   }
 
   public void setSpeed(double spd){

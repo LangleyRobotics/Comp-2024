@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6582127857550991,
+      "y": 6.698598504187022
+    },
+    "rotation": 59.145795494103005
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight Path (Amp)"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Straight Autos",
+  "choreoAuto": false
+}

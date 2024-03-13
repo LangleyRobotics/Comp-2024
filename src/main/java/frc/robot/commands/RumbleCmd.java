@@ -18,9 +18,7 @@ public class RumbleCmd extends Command{
     } 
 
     @Override
-    public void initialize() {
-//5549 on top
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {

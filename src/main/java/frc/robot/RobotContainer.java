@@ -47,8 +47,6 @@ import frc.robot.commands.SwerveControllerCmd;
 import frc.robot.commands.ShooterControllerCmd;
 import frc.robot.commands.PivotControllerCmd;
 import frc.robot.commands.ResetPivotCmd;
-import frc.robot.commands.SetPivotAuto;
-import frc.robot.commands.AutoClimbControllerCmd;
 import frc.robot.commands.ClimbAutoCmd;
 import frc.robot.commands.ClimbControllerCmd;
 import frc.robot.commands.ClimbSwitchDirCmd;
@@ -60,7 +58,7 @@ import frc.robot.commands.IntakeCmd;
 import frc.robot.subsystems.*;
 
 //Auto Commands
-import frc.robot.commands.ShootCmd;
+import frc.robot.commands.ShootAutoCmd;
 import frc.robot.commands.IntakeAutoCmd;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -134,7 +132,8 @@ public class RobotContainer {
       new IntakeCmd(
         intakeSubsystem, 
         () -> 0.0, 
-        0));
+        0,
+        false));
 
     pivotSubsystem.setDefaultCommand(
       new PivotControllerCmd(
@@ -160,23 +159,34 @@ public class RobotContainer {
     //Named commands = commands other than driving around that still need to be executed in auto
 
     var pivotToIntake = new SetPivotCmd(pivotSubsystem, 0).withTimeout(1.5);
-    var pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1).withTimeout(5);
-    var intake = new IntakeAutoCmd(intakeSubsystem, IntakeConstants.kIntakeMotorSpeed, 1);
-    var leftTelescopeDown = new AutoClimbControllerCmd(climbSubsystem, () -> true, false, "left");
+    var pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1).withTimeout(1.5);
+    var intake = new IntakeAutoCmd(intakeSubsystem, 1, false).withTimeout(2.5);
+    var groundIntake = new IntakeAutoCmd(intakeSubsystem, 1, true).withTimeout(4.5);
+    var leftTelescopeDown = new ClimbAutoCmd(climbSubsystem, false, "left").withTimeout(0.3);
 
 
-    ParallelCommandGroup shoot = new ParallelCommandGroup(
-      new ShootCmd(shooterSubsystem, ShooterConstants.kShooterMotorSpeed).withTimeout(1.5),
+    var shoot = new ParallelCommandGroup(
+      new ShootAutoCmd(shooterSubsystem).withTimeout(1.5),
       new SequentialCommandGroup(
         new WaitCommand(1),
-        new IntakeAutoCmd(intakeSubsystem, IntakeConstants.kIntakeMotorSpeed, 1).withTimeout(0.4)));
+        new IntakeAutoCmd(intakeSubsystem, 1, false).withTimeout(0.4)));
+
+    
+    var pivotToAlignShoot = new ParallelCommandGroup(
+      new AutoAlignShootCmd(limelightSubsystem, pivotSubsystem, shooterSubsystem).withTimeout(1.5),
+      new SequentialCommandGroup(
+        new WaitCommand(1),
+        new IntakeAutoCmd(intakeSubsystem, 1, false).withTimeout(0.4)));
 
 
     //Named Commands for PathPlanner
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
     NamedCommands.registerCommand("Pivot To Shoot Up Close", pivotToShootUpClose);
+    NamedCommands.registerCommand("Pivot To Align And Shoot", pivotToAlignShoot);
     NamedCommands.registerCommand("Shoot", shoot);
     NamedCommands.registerCommand("Intake", intake);
+    NamedCommands.registerCommand("Ground Intake", groundIntake);
+    NamedCommands.registerCommand("Left Telescope Down", leftTelescopeDown);
 
 
     // Configure the button bindings
@@ -204,13 +214,17 @@ public class RobotContainer {
 
     
     
-    //Intake ring
-    new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
-      () -> IntakeConstants.kIntakeMotorSpeed, -1));
-
     //Outake ring
+    new JoystickButton(operatorController, Buttons.B).whileTrue(new IntakeCmd(intakeSubsystem, 
+      () -> IntakeConstants.kIntakeMotorSpeed, -1, false));
+
+    //Intake ring
     new JoystickButton(operatorController, Buttons.X).whileTrue(new IntakeCmd(intakeSubsystem, 
-      () -> IntakeConstants.kIntakeMotorSpeed, 1));
+      () -> IntakeConstants.kIntakeMotorSpeed, 1, false));
+
+    //Ground intake (limited)
+    new JoystickButton(operatorController, Buttons.Y).whileTrue(new IntakeCmd(intakeSubsystem, 
+    () -> IntakeConstants.kIntakeMotorSpeed, -1, true));
 
 
 
@@ -221,10 +235,6 @@ public class RobotContainer {
     //Shoot out ring
     new JoystickButton(operatorController, Buttons.RB).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
     () -> false, () -> true, () -> false));
-
-    //Shoot out extra torque
-    new JoystickButton(operatorController, Buttons.Y).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
-    () -> false, () -> false, () -> true));
 
 
 

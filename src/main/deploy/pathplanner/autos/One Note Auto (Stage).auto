@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36086297850199,
-      "y": 5.53
+      "x": 0.7050561319382253,
+      "y": 4.438407050851191
     },
-    "rotation": 0
+    "rotation": -60.57254359681022
   },
   "command": {
     "type": "sequential",
@@ -15,6 +15,12 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Left Telescope Down"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -33,12 +39,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight Path"
+            "pathName": "Straight Path (Stage)"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "One Note",
   "choreoAuto": false
 }

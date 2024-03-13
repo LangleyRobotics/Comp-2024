@@ -1,18 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeAutoCmd extends Command{
     private final IntakeSubsystem intakeSubsystem;
-    private final double speed;
     //direction int is negative 1 or 1.
     private final int direction;
+    private final boolean ground;
 
-    public IntakeAutoCmd(IntakeSubsystem intakeSubsystem, double speed, int direction) {
+    public IntakeAutoCmd(IntakeSubsystem intakeSubsystem, int direction, boolean ground) {
         this.intakeSubsystem = intakeSubsystem;
-        this.speed = speed;
         this.direction = direction;
+        this.ground = ground;
 
         addRequirements(intakeSubsystem);
     }
@@ -25,21 +26,24 @@ public class IntakeAutoCmd extends Command{
     @Override
     public void execute() {
         int dir = direction;
-        double velocity = speed*dir;
+        double velocity = IntakeConstants.kIntakeMotorSpeed * dir;
 
-        intakeSubsystem.setIntakeMotor(velocity);
+        if(ground) {
+          intakeSubsystem.setIntakeMotorLimited(velocity, dir);
+        } else {
+          intakeSubsystem.setIntakeMotor(velocity);
+        }
+        
 
     }
 
     @Override
     public void end(boolean interrupted) {
+      intakeSubsystem.stopIntakeMotor();
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-
-
-
 }

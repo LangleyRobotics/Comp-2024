@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.36086297850199,
-        "y": 5.53
+        "x": 2.2119536546765417,
+        "y": 5.535354916863679
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0870736093848254,
-        "y": 5.53
+        "x": 1.6495379144604458,
+        "y": 4.913737519782733
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.262597392527166,
-        "y": 5.53
+        "x": 2.2119536546765417,
+        "y": 4.065180438053184
       },
       "prevControl": {
-        "x": 2.2188692479677994,
-        "y": 5.53
+        "x": 1.2119536546765417,
+        "y": 4.065180438053184
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,18 +32,21 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "Rings Paths",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

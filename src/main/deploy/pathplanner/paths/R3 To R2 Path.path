@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6816344588466624,
-        "y": 6.75715268691593
+        "x": 2.142885055000881,
+        "y": 4.09478126648561
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.290597959227301,
-        "y": 6.9328152351026535
+        "x": 1.442332115433463,
+        "y": 4.716398663566559
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.192332373252477,
-        "y": 7.026501927468906
+        "x": 2.142885055000881,
+        "y": 5.555088802485298
       },
       "prevControl": {
-        "x": 1.3023087957730821,
-        "y": 6.956236908194216
+        "x": 1.2745940876497153,
+        "y": 5.249213575350228
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Rings Paths",
   "previewStartingState": {
-    "rotation": 60.42216131873867,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

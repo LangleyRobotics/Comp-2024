@@ -10,7 +10,6 @@ import edu.wpi.first.apriltag.AprilTag;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -39,10 +38,7 @@ public class PivotSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot Encoder", getPivotAbsEncoder());
-        SmartDashboard.putBoolean("Pivot Encoder Connected?", pivotAbsEncoder.isConnected());
-        SmartDashboard.putNumber("Pivot Right Voltage", pivotMotorRight.getBusVoltage());
-        SmartDashboard.putNumber("Pivot Left Voltage", pivotMotorLeft.getBusVoltage());
-        
+        SmartDashboard.putBoolean("Pivot Encoder Connected?", pivotAbsEncoder.isConnected());   
     }
 
     //Manually controlling angle of pivot (operator controller during teleop)

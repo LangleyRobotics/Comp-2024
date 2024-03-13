@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight Path"
+            "pathName": "Straight Path (Top)"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight Autos",
   "choreoAuto": false
 }

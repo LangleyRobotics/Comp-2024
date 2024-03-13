@@ -7,9 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.ShooterLookupTable;
-import frc.robot.commands.MoveToSetPointCmd;
-import frc.robot.subsystems.GoodPivot;
 
 //Set pivot to specific setpoints (intake, shoot up close, amp scoring)
 

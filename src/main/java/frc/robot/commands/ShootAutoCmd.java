@@ -9,22 +9,18 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootCmd extends Command {
+public class ShootAutoCmd extends Command {
   private final ShooterSubsystem shooterSubsystem;
-  private final double speed;
-  private double holder;
 
-  public ShootCmd(ShooterSubsystem shooterSubsystem, double speed) {
+  public ShootAutoCmd(ShooterSubsystem shooterSubsystem) {
     this.shooterSubsystem = shooterSubsystem;
-    this.speed = speed;
 
     addRequirements(shooterSubsystem);
   }
 
   @Override
   public void initialize() {
-    shooterSubsystem.setShooterMotor(-speed);
-    //holder = System.currentTimeMillis();
+    shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
   }
    
   @Override
@@ -33,13 +29,12 @@ public class ShootCmd extends Command {
   
   @Override
   public void end(boolean interrupted) {
-    //shooterSubsystem.stopShooterMotor();
+    shooterSubsystem.stopShooterMotor();
   }
 
   @Override
   public boolean isFinished() {
-    //return System.currentTimeMillis() - holder > 2500;
-    return true;
+    return false;
   }
 }
 

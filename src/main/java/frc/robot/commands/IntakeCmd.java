@@ -10,11 +10,13 @@ public class IntakeCmd extends Command{
     private final Supplier<Double> speedSupplier;
     //direction int is negative 1 or 1.
     private final int direction;
+    private final boolean ground;
 
-    public IntakeCmd(IntakeSubsystem intakeSubsystem, Supplier<Double> speedSupplier, int direction) {
+    public IntakeCmd(IntakeSubsystem intakeSubsystem, Supplier<Double> speedSupplier, int direction, boolean ground) {
         this.intakeSubsystem = intakeSubsystem;
         this.speedSupplier = speedSupplier;
         this.direction = direction;
+        this.ground = ground;
 
         addRequirements(intakeSubsystem);
     }
@@ -28,9 +30,14 @@ public class IntakeCmd extends Command{
     public void execute() {
         double speed = speedSupplier.get();
         int dir = direction;
-        double velocity = speed*dir;
+        double velocity = speed * dir;
 
-        intakeSubsystem.setIntakeMotor(velocity);
+        if(ground) {
+            intakeSubsystem.setIntakeMotorLimited(velocity, dir);
+        } else {
+            intakeSubsystem.setIntakeMotor(velocity);
+        }
+        
     }
 
     @Override
