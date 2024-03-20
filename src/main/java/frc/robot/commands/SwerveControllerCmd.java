@@ -47,7 +47,6 @@ public class SwerveControllerCmd extends Command {
 
         double ySpeed = -ySpdFunction.get();
         double xSpeed = xSpdFunction.get();
-        //I PUT A NEGATIVE ON THE TURNING SPEED AAAHHHHH
         double turningSpeed = -1 * turningSpdFunction.get();
 
         // 2. Apply deadband

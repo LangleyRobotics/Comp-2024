@@ -18,12 +18,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Left Telescope Down"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "Pivot To Shoot Up Close"
                 }
               },
@@ -47,15 +41,9 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Straight Path (Top)"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
-                  "name": "Ground Intake"
+                  "name": "TEST Ground Intake"
                 }
               },
               {
@@ -63,14 +51,33 @@
                 "data": {
                   "name": "Pivot To Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Straight Path (Top)"
+                }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Pivot To Align And Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "R2 To Shoot Path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Align And Shoot"
+                }
+              }
+            ]
           }
         }
       ]

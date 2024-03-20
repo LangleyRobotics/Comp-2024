@@ -30,6 +30,11 @@ public class IntakeAutoCmd extends Command{
 
         if(ground) {
           intakeSubsystem.setIntakeMotorLimited(velocity, dir);
+        //   if(intakeSubsystem.getIntakeLimit() && dir == -1) {
+        //     intakeMotor.set(0.02);
+        // } else {
+        //     intakeMotor.set(velocity);
+        // }
         } else {
           intakeSubsystem.setIntakeMotor(velocity);
         }

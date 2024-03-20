@@ -3,13 +3,15 @@
   "robotLength": 0.813,
   "holonomicMode": true,
   "pathFolders": [
+    "Back To Shoot Paths",
     "Rings Paths",
     "Straight Paths"
   ],
   "autoFolders": [
-    "Two Note",
+    "Three Note",
     "One Note",
-    "Straight Autos"
+    "Straight Autos",
+    "Two Note"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

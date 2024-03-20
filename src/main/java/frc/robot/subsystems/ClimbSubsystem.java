@@ -7,6 +7,7 @@ import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.PivotConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimbSubsystem extends SubsystemBase {
@@ -16,23 +17,33 @@ public class ClimbSubsystem extends SubsystemBase {
     private final DutyCycleEncoder rightAbsEncoder = new DutyCycleEncoder(2);
     private final DutyCycleEncoder leftAbsEncoder = new DutyCycleEncoder(3);
 
+    private double rightPos = 0.0;
+    private double leftPos = 0.0;
+
     private int rightDir = 1;
     private int leftDir = 1;
 
     public ClimbSubsystem() {
         rightAbsEncoder.setDistancePerRotation(ClimbConstants.disPerRot);
         leftAbsEncoder.setDistancePerRotation(ClimbConstants.disPerRot);
+
+        rightPos = Preferences.getDouble(ClimbConstants.rightPosKey, rightPos);
+        leftPos = Preferences.getDouble(ClimbConstants.leftPosKey, leftPos);
+
+        rightAbsEncoder.reset();
+        leftAbsEncoder.reset();
     }
 
     
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Right Climb Encoder Position", rightAbsEncoder.get());
-        SmartDashboard.putNumber("Left Climb Encoder Position", leftAbsEncoder.get());
+        SmartDashboard.putNumber("Right Climb Encoder Position", getRightAbsEncoder());
+        SmartDashboard.putNumber("Left Climb Encoder Position", getLeftAbsEncoder());
     }
 
     public void setRightClimbMotor(double velocity){
         double vel = velocity * rightDir;
+
         if((getRightAbsEncoder() < ClimbConstants.rightLowerLimit && vel < 0)
             || (getRightAbsEncoder() > ClimbConstants.rightUpperLimit && vel > 0)) {
             //at the bottom or top
@@ -44,6 +55,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void setLeftClimbMotor(double velocity){
         double vel = velocity * leftDir;
+        
         if((getLeftAbsEncoder() < ClimbConstants.leftLowerLimit && vel < 0)
             || (getLeftAbsEncoder() > ClimbConstants.leftUpperLimit && vel > 0)) {
             //at the bottom or top
@@ -56,13 +68,13 @@ public class ClimbSubsystem extends SubsystemBase {
     //returns the value of the right climb encoder
     public double getRightAbsEncoder() {
         rightAbsEncoder.setDistancePerRotation(ClimbConstants.disPerRot);
-        return rightAbsEncoder.getDistance() - ClimbConstants.rightOffset;
+        return rightAbsEncoder.getDistance() + rightPos;
     }
 
     //returns the value of the left climb encoder
     public double getLeftAbsEncoder() {
         leftAbsEncoder.setDistancePerRotation(ClimbConstants.disPerRot);
-        return leftAbsEncoder.getDistance() - ClimbConstants.rightOffset;
+        return leftAbsEncoder.getDistance() + leftPos;
     }
 
     public void switchDir(char c) {
@@ -76,6 +88,9 @@ public class ClimbSubsystem extends SubsystemBase {
     public void stopClimbMotor(){
         climbMotorRight.set(0);
         climbMotorLeft.set(0);
+
+        Preferences.setDouble(ClimbConstants.rightPosKey, getRightAbsEncoder());
+        Preferences.setDouble(ClimbConstants.leftPosKey, getLeftAbsEncoder());
     }
 
 }

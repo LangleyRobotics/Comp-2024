@@ -94,6 +94,16 @@ public class LimelightSubsystem extends SubsystemBase{
         return Math.sqrt( Math.pow(botPositionFromTag.getX(), 2) + Math.pow(botPositionFromTag.getY(), 2) + Math.pow(botPositionFromTag.getZ(), 2) );
     }
 
+    public double getThetaToTarget() {
+      if(!targetInView()) {
+        return 0;
+      }
+
+      double[] botposeTargetSpace = getBotPoseTargetSpace();
+      Pose3d botPositionFromTag = new Pose3d(botposeTargetSpace[0], botposeTargetSpace[1], botposeTargetSpace[2], new Rotation3d(botposeTargetSpace[3], botposeTargetSpace[4], botposeTargetSpace[5]));
+      return Math.atan(botPositionFromTag.getX() / botPositionFromTag.getZ());
+    }
+
     public double getTargetOffsetX()
     {
       return tx.getDouble(0.0);

@@ -11,16 +11,18 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootAutoCmd extends Command {
   private final ShooterSubsystem shooterSubsystem;
+  private final int dir;
 
-  public ShootAutoCmd(ShooterSubsystem shooterSubsystem) {
+  public ShootAutoCmd(ShooterSubsystem shooterSubsystem, int dir) {
     this.shooterSubsystem = shooterSubsystem;
+    this.dir = dir;
 
     addRequirements(shooterSubsystem);
   }
 
   @Override
   public void initialize() {
-    shooterSubsystem.setShooterMotor(-ShooterConstants.kShooterMotorSpeed);
+    shooterSubsystem.setShooterMotor(ShooterConstants.kShooterMotorSpeed * dir);
   }
    
   @Override

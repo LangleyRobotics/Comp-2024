@@ -65,7 +65,9 @@ public class PivotControllerCmd extends Command{
     
     //**Keep arm in place when no controller input**
     else {
-      pivotSubsystem.setPivotMotorNoBounds(MathMethods.signDouble(Math.cos(pivotSubsystem.getPivotAbsEncoder()))*0.02 - PivotConstants.pivotCompensation * Math.cos(Math.toRadians(pivotSubsystem.getPivotAbsEncoder())));
+      pivotSubsystem.setPivotMotorNoBounds(
+        MathMethods.signDouble(Math.cos(pivotSubsystem.getPivotAbsEncoder())) * 0.02 
+        - PivotConstants.pivotCompensation * Math.cos(Math.toRadians(pivotSubsystem.getPivotAbsEncoder())));
     }
 
   }

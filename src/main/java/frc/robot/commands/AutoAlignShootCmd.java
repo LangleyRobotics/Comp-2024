@@ -40,7 +40,7 @@ public class AutoAlignShootCmd extends Command {
     ActionSetpoint pair = shooterLookupTable.get(distance);
 
     // double rpm = ShooterConstants.kShooterMotorSpeed;
-    double rpm = -pair.getShooterRPM();
+    double rpm = pair.getShooterRPM();
     double angle = pair.getPivotAngle() - 9;
     
 

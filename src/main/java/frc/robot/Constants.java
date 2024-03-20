@@ -171,13 +171,13 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kIntakeMotor = 9;
-    public static final double kIntakeMotorSpeed = 0.4; //value from 0-1
+    public static final int kIntakeMotor = 10;
+    public static final double kIntakeMotorSpeed = 0.65; //value from 0-1
   }
 
   public static final class ShooterConstants {
     //Sparkmax ports
-    public static final int kShooterMotorPort = 10;
+    public static final int kShooterMotorPort = 9;
     //Speed percentage (scale of 0-1)
     public static final double kShooterMotorSpeed = 1.0;
   }
@@ -232,14 +232,15 @@ public final class Constants {
     public static final double kClimbMotorSpeed = 0.6; //value from 0-1
 
     //through bore encoder values
-    public static final double rightUpperLimit = 1000;
-    public static final double rightLowerLimit = 0;
+    public static final double rightUpperLimit = 100;
+    public static final double rightLowerLimit = -100;
 
-    public static final double leftUpperLimit = 1000;
-    public static final double leftLowerLimit = 0;
+    public static final double leftUpperLimit = 100;
+    public static final double leftLowerLimit = -100;
 
-    public static final double rightOffset = 0;
-    public static final double leftOffset = 0;
+    //Preferences constants
+    public static final String rightPosKey = "Right Key";
+    public static final String leftPosKey = "Left Key";
 
     public static final double disPerRot = 1;
   }
