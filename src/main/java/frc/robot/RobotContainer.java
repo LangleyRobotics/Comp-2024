@@ -161,10 +161,13 @@ public class RobotContainer {
 
     var pivotToIntake = new SetPivotCmd(pivotSubsystem, 0).withTimeout(1.5);
     var pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1).withTimeout(1.5);
+    var pivotToShootR1 = new SetPivotCmd(pivotSubsystem, 3).withTimeout(1.5);
+    var pivotToShootSide = new SetPivotCmd(pivotSubsystem, 4).withTimeout(1.5);
+    var pivotToShoot301 = new SetPivotCmd(pivotSubsystem, 5).withTimeout(1.5);
 
     var intake = new IntakeAutoCmd(intakeSubsystem, -1, false).withTimeout(2.5);
     var TESTgroundIntake = new SequentialCommandGroup(
-      new IntakeAutoCmd(intakeSubsystem, -1, true).withTimeout(4),
+      new IntakeAutoCmd(intakeSubsystem, -1, false).withTimeout(2.5),
       new ParallelCommandGroup(
         new IntakeAutoCmd(intakeSubsystem, 1, false).withTimeout(0.4),
         new ShootAutoCmd(shooterSubsystem, -1).withTimeout(0.4)));
@@ -179,19 +182,24 @@ public class RobotContainer {
         new WaitCommand(1),
         new IntakeAutoCmd(intakeSubsystem, -1, false).withTimeout(1)));
 
+    //var shooterOff=new ShootAutoCmd(shooterSubsystem, 0).withTimeout(0.01);
     
     var pivotToAlignShoot = new ParallelCommandGroup(
-      new AutoAlignShootCmd(limelightSubsystem, pivotSubsystem, shooterSubsystem).withTimeout(2.5),
+      new AutoAlignShootCmd(limelightSubsystem, pivotSubsystem, shooterSubsystem).withTimeout(2),
       new SequentialCommandGroup(
-        new WaitCommand(1.5),
+        new WaitCommand(1),
         new IntakeAutoCmd(intakeSubsystem, -1, false).withTimeout(1)));
 
 
     //Named Commands for PathPlanner
     NamedCommands.registerCommand("Pivot To Intake", pivotToIntake);
     NamedCommands.registerCommand("Pivot To Shoot Up Close", pivotToShootUpClose);
+    NamedCommands.registerCommand("Pivot To Shoot Side", pivotToShootSide);
     NamedCommands.registerCommand("Pivot To Align And Shoot", pivotToAlignShoot);
+    NamedCommands.registerCommand("Pivot To Shoot 3.1.1", pivotToShootR1);
+    NamedCommands.registerCommand("Pivot To Shoot 3.0.1", pivotToShoot301);
     NamedCommands.registerCommand("Shoot", shoot);
+    //NamedCommands.registerCommand("Shooter Off", shooterOff);
     NamedCommands.registerCommand("Intake", intake);
     NamedCommands.registerCommand("TEST Ground Intake", TESTgroundIntake);
     NamedCommands.registerCommand("Ground Intake", groundIntake);
@@ -232,7 +240,7 @@ public class RobotContainer {
       () -> IntakeConstants.kIntakeMotorSpeed, 1, false));
 
     //Ground intake (limited)
-    new JoystickButton(operatorController, Buttons.Y).whileTrue(new IntakeCmd(intakeSubsystem, 
+    new JoystickButton(operatorController, Buttons.A).whileTrue(new IntakeCmd(intakeSubsystem, 
     () -> IntakeConstants.kIntakeMotorSpeed, -1, true));
 
 
@@ -244,6 +252,15 @@ public class RobotContainer {
     //Shoot in ring
     new JoystickButton(operatorController, Buttons.LB).whileTrue(new ShooterControllerCmd(shooterSubsystem, 
     () -> false, () -> true, () -> false));
+
+    //Shoot ferry
+    var ferryCmd = new ParallelCommandGroup(
+      new ShooterControllerCmd(shooterSubsystem, () -> false, () -> false, () -> true).withTimeout(1.1),
+      new SequentialCommandGroup(
+        new WaitCommand(0.8),
+        new IntakeCmd(intakeSubsystem, () -> IntakeConstants.kIntakeMotorSpeed, -1, false).withTimeout(0.3)));
+    
+    new JoystickButton(operatorController, Buttons.Y).whileTrue(ferryCmd);
 
 
 
@@ -315,25 +332,6 @@ public class RobotContainer {
 
 
 
-
-
-
-
-    // //Rotate robot to pick up cube
-    // new JoystickButton(driverController, Buttons.B).whileTrue(new SwerveControllerCmd(robotDrive, () -> (0.30), () -> (0.0), 
-    // () -> (-MathMethods.speedMax2(0.04*limelightSubsystem.getTargetOffsetX(), 0.2, 0.05)),
-    // () -> false,  () -> false));
-
-    // //Move robot to pick up cone
-    // new JoystickButton(driverController, Buttons.Y).whileTrue(new SwerveControllerCmd(robotDrive, () -> (0.15), () -> (0.0), 
-    //   () -> (-MathMethods.speedMax2(0.045*limelightSubsystem.getTargetOffsetX(), 0.2, 0.05)),
-    //   () -> false,  () -> false));
-
-    // //Align robot to AprilTag
-    // new JoystickButton(driverController, Buttons.Maria).whileTrue(new SwerveControllerCmd(robotDrive, () -> (MathMethods.speedMax2(0.05*limelightSubsystem.getTargetOffsetYLow(), 0.3, 0.01)), 
-    // () -> (-MathMethods.speedMax2(0.05*limelightSubsystem.getTargetOffsetXLow(), 0.3, 0.02)),
-    // () -> (0.0), ()->(false),  () -> false));
-    
     new JoystickButton(driverController, Buttons.B).onTrue(new InstantCommand(() -> robotDrive.resetEncoders()));
 
   }

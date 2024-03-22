@@ -4,13 +4,15 @@
   "holonomicMode": true,
   "pathFolders": [
     "Back To Shoot Paths",
+    "Kaushals Paths",
     "Rings Paths",
     "Straight Paths"
   ],
   "autoFolders": [
-    "Three Note",
+    "4 Note",
     "One Note",
     "Straight Autos",
+    "Three Note",
     "Two Note"
   ],
   "defaultMaxVel": 3.0,

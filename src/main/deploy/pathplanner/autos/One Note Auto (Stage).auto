@@ -12,15 +12,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Left Telescope Down"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Left Telescope Down"
-                }
-              },
               {
                 "type": "named",
                 "data": {

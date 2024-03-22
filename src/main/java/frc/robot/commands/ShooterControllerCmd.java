@@ -14,14 +14,14 @@ public class ShooterControllerCmd extends Command {
   private final ShooterSubsystem shooterSubsystem;
   private final Supplier<Boolean> shooterPositiveDirFunction;
   private final Supplier<Boolean> shooterNegativeDirFunction;
-  private final Supplier<Boolean> extraTorque;
+  private final Supplier<Boolean> ferry;
 
   
-  public ShooterControllerCmd(ShooterSubsystem shooterSubsystem, Supplier<Boolean> shooterPositiveDirFunction, Supplier<Boolean> shooterNegativeDirFunction, Supplier<Boolean> extraTorque) {
+  public ShooterControllerCmd(ShooterSubsystem shooterSubsystem, Supplier<Boolean> shooterPositiveDirFunction, Supplier<Boolean> shooterNegativeDirFunction, Supplier<Boolean> ferry) {
     this.shooterSubsystem = shooterSubsystem;
     this.shooterPositiveDirFunction = shooterPositiveDirFunction;
     this.shooterNegativeDirFunction = shooterNegativeDirFunction;
-    this.extraTorque = extraTorque;
+    this.ferry = ferry;
 
     addRequirements(shooterSubsystem);
   }
@@ -37,7 +37,7 @@ public class ShooterControllerCmd extends Command {
     //are the buttons pressed
     boolean positiveDir = shooterPositiveDirFunction.get();
     boolean negativeDir = shooterNegativeDirFunction.get();
-    boolean extraTor = extraTorque.get();
+    boolean fer = ferry.get();
 
     double velocity = 0;
 
@@ -45,8 +45,8 @@ public class ShooterControllerCmd extends Command {
       velocity = ShooterConstants.kShooterMotorSpeed;
     } else if(negativeDir) {
       velocity = -1 * ShooterConstants.kShooterMotorSpeed;
-    } else if(extraTor) {
-      velocity = -1 * 1.3;
+    } else if(fer) {
+      velocity = 0.7;
     }
 
     shooterSubsystem.setShooterMotor(velocity);

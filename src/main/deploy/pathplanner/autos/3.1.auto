@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6582127857550991,
-      "y": 6.698598504187022
+      "x": 0.7319122330552369,
+      "y": 6.6207186260526365
     },
-    "rotation": 61.33604288971849
+    "rotation": 61.38954033403484
   },
   "command": {
     "type": "sequential",
@@ -55,13 +55,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "TEST Ground Intake"
+                  "name": "Pivot To Intake"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Pivot To Intake"
+                  "name": "TEST Ground Intake"
                 }
               }
             ]
@@ -91,10 +91,72 @@
               }
             ]
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3.1.2-3.1.3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "TEST Ground Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot To Align And Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3.1.3+"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "TEST Ground Intake"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
-  "folder": "Two Note",
+  "folder": "Three Note",
   "choreoAuto": false
 }

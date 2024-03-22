@@ -39,7 +39,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.8
           }
         },
         {
@@ -80,7 +80,82 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "Pivot To Shoot Side"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "TEST Ground Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot To Intake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Top To R1"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shooter Off"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
                   "name": "Pivot To Align And Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "R1 To Shoot Path"
                 }
               }
             ]
@@ -89,6 +164,6 @@
       ]
     }
   },
-  "folder": "Two Note",
+  "folder": "Three Note",
   "choreoAuto": false
 }

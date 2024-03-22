@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.813006710178897,
-        "y": 7.213875312201409
+        "x": 2.784236337703446,
+        "y": 4.045446552431566
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7796068121958046,
-        "y": 7.470164685334406
+        "x": 2.774369394892637,
+        "y": 5.0124069478908195
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4.0.5"
     },
     {
       "anchor": {
-        "x": 1.3023087957730821,
-        "y": 5.492382339971527
+        "x": 1.5015337722983153,
+        "y": 5.298548289404272
       },
       "prevControl": {
-        "x": 2.0521964493945424,
-        "y": 5.077970741917562
+        "x": 2.1330181121900718,
+        "y": 5.071608604755672
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4.0.6"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": -25.942295489871785,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -1.36392753160304,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Kaushals Paths",
   "previewStartingState": {
-    "rotation": -7.90716270295845,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

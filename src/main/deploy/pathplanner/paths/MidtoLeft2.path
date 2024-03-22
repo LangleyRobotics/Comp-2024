@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1852004303152672,
-        "y": 5.550936522700434
+        "x": 1.3,
+        "y": 5.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1852004303152672,
-        "y": 6.553683047113569
+        "x": 1.290597959227301,
+        "y": 7.319272841113443
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.803970223325064,
-        "y": 6.975928567241751
+        "x": 2.92,
+        "y": 7.12
       },
       "prevControl": {
-        "x": 1.9850139700279423,
-        "y": 6.75885582540396
+        "x": 2.2901554979660856,
+        "y": 7.133996544489643
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 14.349332042947024,
+    "rotation": 19.6428638851544,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Straight Paths",
+  "folder": "Kaushals Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

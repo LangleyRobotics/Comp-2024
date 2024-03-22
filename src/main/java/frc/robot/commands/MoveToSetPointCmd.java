@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.Supplier;
 import java.util.function.Consumer;
-import frc.robot.subsystems.GoodPivot;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.SparkPIDController;

@@ -18,7 +18,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private final DutyCycleEncoder leftAbsEncoder = new DutyCycleEncoder(3);
 
     private double rightPos = 0.0;
-    private double leftPos = 0.0;
+    // private double leftPos = 0.0;
 
     private int rightDir = 1;
     private int leftDir = 1;
@@ -28,7 +28,7 @@ public class ClimbSubsystem extends SubsystemBase {
         leftAbsEncoder.setDistancePerRotation(ClimbConstants.disPerRot);
 
         rightPos = Preferences.getDouble(ClimbConstants.rightPosKey, rightPos);
-        leftPos = Preferences.getDouble(ClimbConstants.leftPosKey, leftPos);
+        // leftPos = Preferences.getDouble(ClimbConstants.leftPosKey, leftPos);
 
         rightAbsEncoder.reset();
         leftAbsEncoder.reset();
@@ -74,7 +74,8 @@ public class ClimbSubsystem extends SubsystemBase {
     //returns the value of the left climb encoder
     public double getLeftAbsEncoder() {
         leftAbsEncoder.setDistancePerRotation(ClimbConstants.disPerRot);
-        return leftAbsEncoder.getDistance() + leftPos;
+        // return leftAbsEncoder.getDistance() + leftPos;
+        return leftAbsEncoder.getDistance();
     }
 
     public void switchDir(char c) {
@@ -90,7 +91,7 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotorLeft.set(0);
 
         Preferences.setDouble(ClimbConstants.rightPosKey, getRightAbsEncoder());
-        Preferences.setDouble(ClimbConstants.leftPosKey, getLeftAbsEncoder());
+        // Preferences.setDouble(ClimbConstants.leftPosKey, getLeftAbsEncoder());
     }
 
 }

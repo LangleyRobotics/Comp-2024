@@ -13,7 +13,6 @@ import frc.robot.subsystems.PivotSubsystem;
 public class SetPivotCmd extends Command {
   
   private final PivotSubsystem pivotSubsystem;
-  //private final GoodPivot pivot;
   private final int position;
   private final double targetPosition;
 
@@ -30,6 +29,14 @@ public class SetPivotCmd extends Command {
     } else if (position == 2) {
       //**Amp scoring position**
       this.targetPosition = PivotConstants.kAmpPosition;
+    } else if(position == 3) {
+      //**Shoot position for ring 1**
+      this.targetPosition = PivotConstants.shootRing1;
+    } else if(position == 4) {
+      //**Shoot position for side of subwoofer**
+      this.targetPosition = PivotConstants.shootSideRingsPosition;
+    } else if(position == 5) {
+      this.targetPosition = PivotConstants.shoot301;
     } else {
       this.targetPosition = PivotConstants.kMaxPivotPosition;
     }
