@@ -117,7 +117,7 @@ public class DriveSubsystem extends SubsystemBase {
     new Thread( () -> {
       try {
         new WaitCommand(1.0);
-        // zeroHeading(); //Didn't work??
+        zeroHeading(); //Didn't work??
         //initModulesReset(getGyroConnected());
         //m_gyro.setAngleAdjustment(180);
       } catch (Exception e) {
@@ -156,14 +156,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setPose(Pose2d aprilPose2d) {
-    m_odometry.resetPosition(aprilPose2d.getRotation(),         
+    m_odometry.resetPosition(m_gyro.getRotation2d(),         
       new SwerveModulePosition[] {
         frontRight.getPosition(),
         frontLeft.getPosition(),
         rearRight.getPosition(),
         rearLeft.getPosition()
       }, aprilPose2d);
-      m_gyro.setAngleAdjustment(aprilPose2d.getRotation().getDegrees());
+      // m_gyro.setAngleAdjustment(aprilPose2d.getRotation().getDegrees());
   }
 
   

@@ -149,7 +149,7 @@ public class RobotContainer {
         false,
         "none"));
 
-    // robotDrive.zeroHeading();
+    robotDrive.zeroHeading();
     //robotDrive.initModulesReset();
 
     //lightingSubsystem.setDefaultCommand(lightingSubsystem.splitColor(Color.kAquamarine, Color.kDarkCyan));

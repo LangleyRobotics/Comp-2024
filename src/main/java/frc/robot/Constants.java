@@ -198,7 +198,7 @@ public final class Constants {
     public static final double kAmpPosition = 90;
     public static final double shootRing1 = 146.4;
     public static final double shootUpClosePosition = 170; //position of pivot encoder for shooting when up against the speaker
-    public static final double shootSidePosition = 163;
+    public static final double shootSidePosition = 165;
     public static final double shoot301 = 157;
 
     public static final double kPivotOffset = 181;
