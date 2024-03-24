@@ -198,7 +198,7 @@ public final class Constants {
     public static final double kAmpPosition = 90;
     public static final double shootRing1 = 146.4;
     public static final double shootUpClosePosition = 170; //position of pivot encoder for shooting when up against the speaker
-    public static final double shootSideRingsPosition = 169;
+    public static final double shootSidePosition = 163;
     public static final double shoot301 = 157;
 
     public static final double kPivotOffset = 181;
@@ -234,11 +234,11 @@ public final class Constants {
     public static final double kClimbMotorSpeed = 0.6; //value from 0-1
 
     //through bore encoder values
-    public static final double rightUpperLimit = 1.3;
-    public static final double rightLowerLimit = -7.1;
+    public static final double rightUpperLimit = 1000;
+    public static final double rightLowerLimit = -1000;
 
-    public static final double leftUpperLimit = 100;
-    public static final double leftLowerLimit = -100;
+    public static final double leftUpperLimit = 1000;
+    public static final double leftLowerLimit = -1000;
 
     //Preferences constants
     public static final String rightPosKey = "Right Key";

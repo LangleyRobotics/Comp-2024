@@ -55,7 +55,7 @@ public class PivotSubsystem extends SubsystemBase {
                     pivotMotorLeft.set(0.0);
                 }
         } catch(Exception e) {
-            System.out.println("Error: Pivot Motor is Set to a value out of valid range [-1.0, 1.0]");
+            // System.out.println("Error: Pivot Motor is Set to a value out of valid range [-1.0, 1.0]");
         }
     }
 
@@ -89,23 +89,19 @@ public class PivotSubsystem extends SubsystemBase {
         //desPosition = radians
         double output = pivotPIDController.calculate(getPivotAbsEncoder(), desPosition);
         if(output > 0 && getPivotAbsEncoder() >= 155) { 
-            System.out.println("Forward limiting");
             // pivot going forward, slow so doesnt hit ground
             pivotMotorRight.setVoltage(-0.4);
             pivotMotorLeft.setVoltage(0.4);
         } else if(desPosition < PivotConstants.kAmpPosition && output < 0) { 
-            System.out.println("Backwards limiting");
-
             // pivot going backwards, slow so doesnt hit ground
             setPivotMotorNoBounds(MathMethods.signDouble(Math.cos(getPivotAbsEncoder()))*0.02 - PivotConstants.pivotCompensation * Math.cos(Math.toRadians(getPivotAbsEncoder())));
         } else if(Math.abs(getPivotAbsEncoder() - desPosition) > PivotConstants.deadbandAngle){
             // pivot is freeeee
-            System.out.println("Pivot is Free");
             pivotMotorRight.setVoltage(-output);
             pivotMotorLeft.setVoltage(output);
         }
-        System.out.println("output: " + output);
-        System.out.println("actual, target " + getPivotAbsEncoder() + ", " + desPosition);
+        // System.out.println("output: " + output);
+        // System.out.println("actual, target " + getPivotAbsEncoder() + ", " + desPosition);
     }
 
     public boolean isAtSetpoint() {

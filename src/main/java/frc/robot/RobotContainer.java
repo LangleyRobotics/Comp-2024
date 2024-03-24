@@ -149,7 +149,7 @@ public class RobotContainer {
         false,
         "none"));
 
-    robotDrive.zeroHeading();
+    // robotDrive.zeroHeading();
     //robotDrive.initModulesReset();
 
     //lightingSubsystem.setDefaultCommand(lightingSubsystem.splitColor(Color.kAquamarine, Color.kDarkCyan));
@@ -160,9 +160,9 @@ public class RobotContainer {
     //Named commands = commands other than driving around that still need to be executed in auto
 
     var pivotToIntake = new SetPivotCmd(pivotSubsystem, 0).withTimeout(1.5);
-    var pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1).withTimeout(1.5);
+    var pivotToShootUpClose = new SetPivotCmd(pivotSubsystem, 1).withTimeout(2);
     var pivotToShootR1 = new SetPivotCmd(pivotSubsystem, 3).withTimeout(1.5);
-    var pivotToShootSide = new SetPivotCmd(pivotSubsystem, 4).withTimeout(1.5);
+    var pivotToShootSide = new SetPivotCmd(pivotSubsystem, 4).withTimeout(2);
     var pivotToShoot301 = new SetPivotCmd(pivotSubsystem, 5).withTimeout(1.5);
 
     var intake = new IntakeAutoCmd(intakeSubsystem, -1, false).withTimeout(2.5);

@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setIntakeMotorLimited(double velocity, double dir){
-        if(intakeLimit.get() && dir == -1) {
+        if(!intakeLimit.get() && dir == -1) {
             intakeMotor.set(0.02);
         } else {
             intakeMotor.set(velocity);

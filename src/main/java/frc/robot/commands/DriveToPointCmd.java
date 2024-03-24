@@ -47,9 +47,6 @@ public class DriveToPointCmd extends Command {
 
     @Override
     public boolean isFinished() {
-      if (m_HoloDrive.targetPoseAchieved()) {
-        System.out.println("Itsa me mario");
-      }  
       return m_HoloDrive.targetPoseAchieved();
         //return false;
     }

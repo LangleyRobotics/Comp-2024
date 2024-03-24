@@ -41,7 +41,7 @@ public class OTFTrajectoryFactory {
             thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         Trajectory path = TrajectoryGenerator.generateTrajectory(currentPose.get(), listOfTranslations, endPose, config);
-        System.out.println(currentPose.get());
+        // System.out.println(currentPose.get());
 
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
             path,

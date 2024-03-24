@@ -34,7 +34,7 @@ public class SetPivotCmd extends Command {
       this.targetPosition = PivotConstants.shootRing1;
     } else if(position == 4) {
       //**Shoot position for side of subwoofer**
-      this.targetPosition = PivotConstants.shootSideRingsPosition;
+      this.targetPosition = PivotConstants.shootSidePosition;
     } else if(position == 5) {
       this.targetPosition = PivotConstants.shoot301;
     } else {
